@@ -9,11 +9,9 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Todo;
 use NotificationHelper;
-use FileHelper;
-use UtilHelper;
+
 class TodoController extends Controller
 {   
-    private $icon = 'icon-layers';
     private $status = ['active', 'inactive'];
 
     public function index(Request $request)
@@ -24,7 +22,6 @@ class TodoController extends Controller
 
         $data = [
             'title' => 'List Todo',
-            'icon' => $this->icon,
             'data' => $todos,
             'f_search' => $f_search
         ];
@@ -35,7 +32,6 @@ class TodoController extends Controller
     {
         $data = [
             'title' => 'Create New Todo',
-            'icon' => $this->icon,
             'status' => $this->status,
         ];
         return view('cms.todo.create')->with($data);
@@ -79,7 +75,6 @@ class TodoController extends Controller
         $row = Todo::findOrFail($id);
         $data = [
             'title' => 'Edit Todo',
-            'icon' => $this->icon,
             'status' => $this->status,
             'row'  => $row,
         ];

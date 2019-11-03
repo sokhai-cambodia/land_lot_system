@@ -9,7 +9,7 @@
         <!-- Font Awesome -->
         <link rel="stylesheet" href="{{ asset('cms/plugins/fontawesome-free/css/all.min.css') }}">
         <!-- Ionicons -->
-        <link rel="stylesheet" href="{{ asset('cms/plugins/fontawesome-free/css/ionicons.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('cms/dist/css/ionicons.min.css') }}">
         <!-- icheck bootstrap -->
         <link rel="stylesheet" href="{{ asset('cms/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
         <!-- Theme style -->
