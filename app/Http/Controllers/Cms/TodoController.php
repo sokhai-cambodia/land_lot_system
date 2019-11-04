@@ -13,12 +13,17 @@ use NotificationHelper;
 class TodoController extends Controller
 {   
     private $status = ['active', 'inactive'];
+    private $contentHeaders = ['name' => 'Dashboard', 'route' => 'cms', 'class' => ''];
 
     public function index()
     {
 
         $data = [
             'title' => 'List Todo',
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'Todo', 'route' => 'todo', 'class' => 'active']
+            ],
         ];
         return view('cms.todo.index')->with($data);
     }
@@ -26,8 +31,13 @@ class TodoController extends Controller
     public function create()
     {
         $data = [
-            'title' => 'Create New Todo',
+            'title' => 'Create Todo',
             'status' => $this->status,
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'Todo', 'route' => 'todo', 'class' => ''],
+                ['name' => 'Create Todo', 'route' => 'todo.create', 'class' => 'active']
+            ],
         ];
         return view('cms.todo.create')->with($data);
     }
@@ -72,6 +82,11 @@ class TodoController extends Controller
             'title' => 'Edit Todo',
             'status' => $this->status,
             'row'  => $row,
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'Todo', 'route' => 'todo', 'class' => ''],
+                ['name' => 'Edit Todo', 'route' => 'todo.edit', 'class' => 'active']
+            ],
         ];
         
         return view('cms.todo.edit')->with($data);

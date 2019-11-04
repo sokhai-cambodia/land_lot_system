@@ -1,3 +1,4 @@
+
 @extends('layouts.cms.template', compact('title'))
 
 @section('header')
