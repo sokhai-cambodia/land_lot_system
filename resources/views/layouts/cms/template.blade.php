@@ -40,6 +40,9 @@
         <script src="{{ asset('cms/plugins/jquery/jquery.min.js')}}"></script>
         <!-- Bootstrap 4 -->
         <script src="{{ asset('cms/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+        <!-- SweetAlert2 -->
+<script src="{{ asset('cms/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+
         <!-- overlayScrollbars -->
         <script src="{{ asset('cms/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
         <!-- AdminLTE App -->
@@ -47,6 +50,7 @@
         <!-- AdminLTE for demo purposes -->
         <script src="{{ asset('cms/dist/js/demo.js')}}"></script>
         @include('layouts.message.notification')
+        @include('layouts.message.delete-popup')
         @yield('footer')
     </body>
 </html>

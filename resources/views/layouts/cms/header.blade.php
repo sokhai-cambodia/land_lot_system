@@ -2,6 +2,9 @@
 <link rel="stylesheet" href="{{ asset('cms/plugins/fontawesome-free/css/all.min.css')}}">
 <!-- Ionicons -->
 <link rel="stylesheet" href="{{ asset('cms/dist/css/ionicons.min.css') }}">
+<!-- SweetAlert2 -->
+<link rel="stylesheet" href="{{ asset('cms/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+
 <!-- overlayScrollbars -->
 <link rel="stylesheet" href="{{ asset('cms/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
 <!-- Theme style -->

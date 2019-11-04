@@ -72,4 +72,5 @@
         });
     });
 </script>
+@include('layouts.message.delete-confirm')
 @endsection

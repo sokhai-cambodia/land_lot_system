@@ -175,7 +175,7 @@ class TodoController extends Controller
                 "status" => $record->status,
                 "action" => "<div class='btn-group'>
                                 <a href='$routeEdit' class='btn btn-default btn-sm'><i class='far fa-edit'></i></a>
-                                <a href='$routeDelete' class='btn btn-default btn-sm'><i class='fas fa-trash-alt'></i></a>
+                                <button type='button' data-url='$routeDelete' class='btn btn-default btn-sm btn-delete'><i class='fas fa-trash-alt'></i></button>
                             </div>",
             ];
         }
