@@ -21,11 +21,10 @@ Class UtilHelper
         return preg_replace('/\s+/u', '-', trim($string));
     }
 
-    public static function activeNavbar($routeArr, $trigger = false) {
-        $str = $trigger ? 'active pcoded-trigger' : 'active';
+    public static function activeSideBar($routeArr, $hasTreeView = false) {
+        $str = $hasTreeView ? 'menu-open' : 'active';
         return in_array(request()->route()->getName(), $routeArr) ? $str : '';
     }
-
 
     public static function route($name, $params = []) {
         return Route::has($name) ? route($name, $params) : '#';

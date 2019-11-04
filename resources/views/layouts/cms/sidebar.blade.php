@@ -25,7 +25,7 @@
                     with font-awesome or any other icon font library -->
                 
                 <li class="nav-item">
-                    <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link">
+                    <a href="{{ UtilHelper::route('cms') }}" class="nav-link {{ UtilHelper::activeSideBar(['cms']) }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -34,16 +34,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ UtilHelper::route('todo') }}" class="nav-link">
+                <a href="{{ UtilHelper::route('todo') }}" class="nav-link {{ UtilHelper::activeSideBar(['todo']) }}">
                         <i class="nav-icon far fa-calendar-alt"></i>
                         <p>
                             Todo
-                            
                         </p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview menu-open">
-                    <a href="#" class="nav-link active">
+                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['define-your-route-name'], true) }}">
+                    <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-copy"></i>
                         <p>
                             Menu Options
@@ -53,19 +52,19 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link">
+                            <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link {{ UtilHelper::activeSideBar(['define-your-route-name']) }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Menu 1</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link">
+                            <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link {{ UtilHelper::activeSideBar(['define-your-route-name']) }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Menu 2</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link active">
+                            <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link {{ UtilHelper::activeSideBar(['define-your-route-name']) }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Menu 3 (Active)</p>
                             </a>
@@ -75,7 +74,7 @@
                 </li>
                 <li class="nav-header">EXAMPLES</li>
                 <li class="nav-item">
-                    <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link">
+                    <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link {{ UtilHelper::activeSideBar(['define-your-route-name']) }}">
                         <i class="nav-icon far fa-calendar-alt"></i>
                         <p>
                             Menu 1
@@ -84,7 +83,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link">
+                    <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link {{ UtilHelper::activeSideBar(['define-your-route-name']) }}">
                         <i class="nav-icon far fa-image"></i>
                         <p>
                             Menu 2
@@ -101,19 +100,19 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link">
+                            <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link {{ UtilHelper::activeSideBar(['define-your-route-name']) }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Menu 1</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link">
+                            <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link {{ UtilHelper::activeSideBar(['define-your-route-name']) }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Menu 2</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link">
+                            <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link {{ UtilHelper::activeSideBar(['define-your-route-name']) }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Menu 3</p>
                             </a>
