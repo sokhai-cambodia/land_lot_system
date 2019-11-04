@@ -2,9 +2,6 @@
 
 @section('content')
 
-<!-- Content Header (Page header) -->
-@include('layouts.cms.content-header')
-
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">

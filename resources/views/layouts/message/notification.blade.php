@@ -1,7 +1,7 @@
-<!-- Toast.css -->
-<link rel="stylesheet" type="text/css" href="{{ asset('plugin/cms/assets/css/jquery.toast.css') }}">
-<!-- toast js -->
-<script src="{{ asset('plugin/cms/assets/js/jquery.toast.js') }}"></script>
+<!-- Toastr -->
+<link rel="stylesheet" href="{{ asset('cms/plugins/toastr/toastr.min.css') }}">
+<!-- Toastr -->
+<script src="{{ asset('cms/plugins/toastr/toastr.min.js') }}"></script>
 
 <script>
 @if(Session::has('message'))
@@ -11,48 +11,23 @@
     var warning = '{{ NotificationHelper::NOTIFICATION_WARNING }}';
     var success = '{{ NotificationHelper::NOTIFICATION_SUCCESS }}';
     var error = '{{ NotificationHelper::NOTIFICATION_ERROR }}';
-    switch(type){
+    switch(type) {
         case info:
-            showToast(
-                info,
-                message,
-                info
-            );
+            toastr.info(message, info);
             break;
 
         case warning:
-            showToast(
-                warning,
-                message,
-                warning
-            );
+            toastr.warning(message, warning);
             break;
 
         case success:
-            showToast(
-                success,
-                message,
-                success
-            );
+            toastr.success(message, success);
             break;
 
         case error:
-            showToast(
-                error,
-                message,
-                error
-            );
+            toastr.error(message, error);
             break;
     }
 @endif
 
-function showToast(heading, text, icon, position='top-right', loader=true) {
-    $.toast({
-        position: 'top-right',
-        heading: heading.toUpperCase(),
-        text: text,
-        icon: icon,
-        loader: loader,
-    })
-}
 </script>

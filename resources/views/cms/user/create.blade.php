@@ -1,6 +1,9 @@
 @extends('layouts.cms.template', compact('title','icon'))
 
 @section('content')
+
+
+
  <!-- Basic Form Inputs card start -->
  <div class="card">
     <div class="card-header">

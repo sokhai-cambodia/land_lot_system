@@ -87,5 +87,6 @@
         <script src="{{ asset('cms/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
         <!-- AdminLTE App -->
         <script src="{{ asset('cms/dist/js/adminlte.min.js') }}"></script>
+        @include('layouts.message.notification')
     </body>
 </html>

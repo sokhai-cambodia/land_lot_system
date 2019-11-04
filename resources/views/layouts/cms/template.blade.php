@@ -19,9 +19,11 @@
             @include('layouts.cms.sidebar')
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
-                
-                
-                
+                <!-- Content Header (Page header) -->
+                @include('layouts.cms.content-header')
+
+                <!-- Error Message -->
+                @include('layouts.message.error')
                 @yield('content')
                 
             </div>
@@ -44,6 +46,7 @@
         <script src="{{ asset('cms/dist/js/adminlte.min.js')}}"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="{{ asset('cms/dist/js/demo.js')}}"></script>
+        @include('layouts.message.notification')
         @yield('footer')
     </body>
 </html>
