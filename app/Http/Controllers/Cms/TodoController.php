@@ -14,16 +14,11 @@ class TodoController extends Controller
 {   
     private $status = ['active', 'inactive'];
 
-    public function index(Request $request)
+    public function index()
     {
-        $f_search = isset($request->search) ? $request->search : "";
-        $todos = Todo::where('name', 'like', '%'.$f_search.'%')
-                    ->paginate(10);
 
         $data = [
             'title' => 'List Todo',
-            'data' => $todos,
-            'f_search' => $f_search
         ];
         return view('cms.todo.index')->with($data);
     }
@@ -136,6 +131,65 @@ class TodoController extends Controller
             NotificationHelper::errorNotification($e);
             return redirect()->route('todo');
         }
+    }
+
+    // Ajax with datatable
+    public function dataTable(Request $request)
+    {
+        $draw = $request['draw'];
+        $row = $request['start'];
+        $rowPerPage = $request['length']; // Rows display per page
+        $columnIndex = $request['order'][0]['column']; // Column index
+        $columnName = $request['columns'][$columnIndex]['data']; // Column name
+        $columnSortOrder = $request['order'][0]['dir']; // asc or desc
+        $searchValue = $request['search']['value']; // Search value
+        
+        
+        //  Search 
+        $searchQuery = " ";
+        if($searchValue != ''){
+            $searchQuery = " and (name like "."'%$searchValue%'".") ";
+        }
+
+        //  Total number of records without filtering
+        $totalRecords = Todo::count();
+
+        //  Total number of record with filtering
+        $totalRecordwithFilter = Todo::whereRaw('1=1'.$searchQuery)->count();
+        
+        ## Fetch records
+        $records = Todo::whereRaw('1=1'.$searchQuery)
+                    ->orderBy($columnName, $columnSortOrder)
+                    ->offset($row)
+                    ->limit($rowPerPage)
+                    ->get();
+
+        $data = array();
+
+        foreach($records as $record) {
+            $routeEdit = route('todo.update', ['id' => $record->id]);
+            $routeDelete = route('todo.delete', ['id' => $record->id]);
+            $data[] = [
+                "name" => $record->name,
+                "description" => $record->description,
+                "status" => $record->status,
+                "action" => "<div class='btn-group'>
+                                <a href='$routeEdit' class='btn btn-default btn-sm'><i class='far fa-edit'></i></a>
+                                <a href='$routeDelete' class='btn btn-default btn-sm'><i class='fas fa-trash-alt'></i></a>
+                            </div>",
+            ];
+        }
+
+        ## Response
+        $response = [
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecordwithFilter,
+            "iTotalDisplayRecords" => $totalRecords,
+            "aaData" => $data
+        ];
+        
+        return response()->json($response);
+
     }
     
 }

@@ -23,17 +23,20 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="name">Name</label>
-                                <input type="name" class="form-control" name="name" id="name" placeholder="Enter name">
+                                <input type="name" class="form-control" name="name" id="name" placeholder="Enter name" value="{{ UtilHelper::hasValue(old('name'), "") }}">
                             </div>
                             <div class="form-group">
                                 <label for="description">Description</label>
-                                <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description"></textarea>
+                                <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description">{{ UtilHelper::hasValue(old('description'), "") }}</textarea>
                             </div>
                             <div class="form-group">
                                 <label for="status">Status</label>
                                 <select name="status" id="status" class="form-control">
                                     @foreach ($status as $s)
-                                        <option value="{{ $s }}" {{  UtilHelper::selected($s, old('status')) }}>{{ $s }}</option>
+                                        @php 
+                                            $sSelected = UtilHelper::hasValue(old('status'), "");
+                                        @endphp
+                                        <option value="{{ $s }}" {{  UtilHelper::selected($s, $sSelected) }}>{{ $s }}</option>
                                     @endforeach
                                 </select>
                             </div>

@@ -9,6 +9,7 @@ Route::group(['prefix' => 'todo'], function(){
     Route::post('/update/{id}', 'Cms\TodoController@update')->name('todo.update');
     Route::get('/destroy/{id}', 'Cms\TodoController@destroy')->name('todo.delete');
     Route::get('/toggle/{id}', 'Cms\TodoController@toggle')->name('todo.toggle');
+    Route::post('/datatable', 'Cms\TodoController@dataTable')->name('todo.data-table');
 
 });
 
