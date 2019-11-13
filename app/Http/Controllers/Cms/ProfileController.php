@@ -17,13 +17,17 @@ class ProfileController extends Controller
 {   
     private $icon = 'icon-layers';
     private $gender = ['male', 'female'];
+    private $contentHeaders = ['name' => 'Dashboard', 'route' => 'cms', 'class' => ''];
 
     public function edit()
     {
         $data = [
             'title' => 'Edit Profile',
-            'icon' => $this->icon,
             'gender' => $this->gender,
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'Edit Profile', 'route' => 'update.profile', 'class' => 'active']
+            ],
         ];
         
         return view('cms.profile.edit')->with($data);
@@ -75,8 +79,11 @@ class ProfileController extends Controller
     public function changePassword()
     {
         $data = [
-            'title' => 'Edit Profile',
-            'icon' => $this->icon,
+            'title' => 'Change Password',
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'Change Password', 'route' => 'profile.change-password', 'class' => 'active']
+            ],
         ];
         
         return view('cms.profile.change-password')->with($data);
