@@ -44,6 +44,15 @@
         <!-- /.card-body -->
     </div>
     <!-- /.card -->
+    <!-- /.modal -->
+    <div class="modal fade" id="view-info">
+        <div class="modal-dialog modal-lg" id="view-content">
+            
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 </section>
 <!-- /.content -->
 @endsection
@@ -55,6 +64,7 @@
 <!-- page script -->
 <script>
     $(function () {
+        // Datatable
         $('#dt').DataTable({
             'processing': true,
             'serverSide': true,
@@ -77,6 +87,30 @@
             "columnDefs": [
                 { "orderable": false, "targets": 3 }
             ]
+        });
+
+        // open modal
+        $("body").on('click', '.btn-view-detail', function(){
+            var id = $(this).attr('data-id');
+            $.ajax({
+                url: "{{ route('user.detail') }}",
+                method: 'post',
+                dataType : 'json',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "id": id,
+                },
+                success: function(result){
+                    if(result.status == 1) {
+                        $("#view-content").html(result.modal);
+                        $('#view-info').modal('toggle');
+                    } else {
+                        alert('no data');
+                    }
+                    
+                    
+                }
+            })
         });
     });
 </script>

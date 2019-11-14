@@ -407,5 +407,23 @@ class UserController extends Controller
         return response()->json($response);
 
     }
+
+    // view user detail with modal
+    public function detail(Request $request) 
+    {
+        $user = User::find($request->id);
+        if($user == null) {
+            return response()->json([ 'status' => 0 ]);
+        }
+
+        $modal = view('cms.user.modal-detail')
+                ->with(['row' => $user])
+                ->render();
+
+        return response()->json([
+            'status' => 1,
+            'modal' => $modal
+        ]);
+    }
     
 }

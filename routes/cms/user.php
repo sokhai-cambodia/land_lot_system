@@ -13,5 +13,7 @@ Route::group(['prefix' => 'user'], function(){
     Route::get('/toggle/{role}/{id}', 'Cms\UserController@toggle')->name('user.toggle');
     Route::post('/datatable', 'Cms\UserController@dataTable')->name('user.data-table');
     Route::post('/deleted-list-data-table', 'Cms\UserController@deletedListDataTable')->name('user.deleted-list.data-table');
+
+    Route::post('/detail', 'Cms\UserController@detail')->name('user.detail');
 });
 
