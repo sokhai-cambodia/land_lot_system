@@ -294,7 +294,7 @@ class UserController extends Controller
         }
 
         //  Total number of records without filtering
-        $totalRecords = User::count();
+        //  $totalRecords = User::where('role', $role)->where('status', 'active')->count();
 
         //  Total number of record with filtering
         $totalRecordwithFilter = User::whereRaw('1=1'.$searchQuery)
@@ -324,8 +324,10 @@ class UserController extends Controller
                 "passport_id" => $record->passport_id,
                 "status" => $record->status,
                 "action" => "<div class='btn-group'>
-                                <a href='$routeEdit' class='btn btn-default btn-sm'><i class='far fa-edit'></i></a>
-                                <button type='button' data-url='$routeToggle' class='btn btn-default btn-sm btn-delete'><i class='fas fa-toggle-on'></i></button>
+                                <a href='$routeEdit' class='btn btn-default btn-sm' title='Edit'><i class='far fa-edit'></i></a>
+                                <button type='button' data-url='$routeToggle' class='btn btn-default btn-sm btn-delete' title='Inactive'><i class='fas fa-toggle-on'></i></button>
+                                <button type='button' data-id='$record->id' class='btn btn-default btn-sm btn-view-detail' title='Detail'><i class='fas fa-eye'></i></button>
+                                <a href='$routeEdit' class='btn btn-default btn-sm' title='Documents'><i class='far fa-folder'></i></a>
                             </div>",
             ];
         }
@@ -334,7 +336,7 @@ class UserController extends Controller
         $response = [
             "draw" => intval($draw),
             "iTotalRecords" => $totalRecordwithFilter,
-            "iTotalDisplayRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordwithFilter,
             "aaData" => $data
         ];
         
