@@ -34,7 +34,6 @@ Class FileHelper
 
     public static function updateImage($file, $oldFile = "",  $pathName = '') {
         $pathName = $pathName == '' ? FileHelper::getDefaultPathName() : $pathName;
-        $oldImagePath = $pathName.'/'.$oldFile;
         FileHelper::deleteImage($oldFile, $pathName);
 
         return FileHelper::upload($file, $pathName);

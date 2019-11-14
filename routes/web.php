@@ -41,4 +41,7 @@ Route::group(['prefix' => 'cms', 'middleware' => ['auth']], function(){
     // Brand
     require_once __DIR__.'/cms/todo.php';
 
+    // Comapny
+    require_once __DIR__.'/cms/company.php';
+
 });

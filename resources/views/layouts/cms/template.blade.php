@@ -49,6 +49,8 @@
         <script src="{{ asset('cms/dist/js/adminlte.min.js')}}"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="{{ asset('cms/dist/js/demo.js')}}"></script>
+        <!-- Dropify -->
+        <script src="{{ asset('cms/plugins/dropify/dropify.js')}}"></script>
         @include('layouts.message.notification')
         @include('layouts.message.delete-popup')
         @yield('footer')

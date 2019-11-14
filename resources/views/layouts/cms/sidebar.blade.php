@@ -34,6 +34,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ UtilHelper::route('company') }}" class="nav-link {{ UtilHelper::activeSideBar(['company']) }}">
+                        <i class="nav-icon fas fa-building"></i>
+                        <p>
+                            Company
+                            
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                 <a href="{{ UtilHelper::route('todo') }}" class="nav-link {{ UtilHelper::activeSideBar(['todo']) }}">
                         <i class="nav-icon far fa-calendar-alt"></i>
                         <p>
