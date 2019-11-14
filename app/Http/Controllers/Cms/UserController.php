@@ -17,57 +17,62 @@ use FileHelper;
 
 class UserController extends Controller
 {   
-    private $icon = 'icon-layers';
     private $gender = ['male', 'female'];
     private $status = ['active', 'inactive'];
+    private $contentHeaders = ['name' => 'Dashboard', 'route' => 'cms', 'class' => ''];
+    private $roles = ['customer', 'witness', 'staff'];
 
-
-    public function index(Request $request)
+    public function index()
     {
 
-        $f_role = isset($request->role) ? $request->role : 0;
-        $f_search = isset($request->search) ? $request->search : "";
-
-        $where = [];
-        if($f_role > 0 && $f_role != '') {
-            $where[] = ['role_id', $f_role];
-        }
-
-
-        $users = User::where($where)
-                    ->where(function($query) use($f_search) {
-                        $query->orWhere('username', 'like', '%'.$f_search.'%')
-                        ->orWhere('phone', 'like', '%'.$f_search.'%')
-                        ->orWhere(DB::raw("CONCAT(last_name, last_name)"), 'like', '%'.$f_search.'%');
-                    })
-                    ->paginate(10);
-        $roles = Role::all();
         $data = [
-            'title' => 'List User',
-            'icon' => $this->icon,
-            'data' => $users,
-            'roles' => $roles,
-            'f_role' => $f_role,
-            'f_search' => $f_search
+            'title' => 'List Customer',
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'Customer', 'route' => 'user.customer', 'class' => 'active']
+            ],
+            
         ];
         return view('cms.user.index')->with($data);
     }
 
-    public function create()
+    public function customer()
     {
-        $roles = Role::all();   
+        
         $data = [
-            'title' => 'Create New User',
-            'icon' => $this->icon,
+            'title' => 'List Customer',
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'Customer', 'route' => 'user.customer', 'class' => 'active']
+            ],
+            'role' => 'customer'
+        ];
+        return view('cms.user.index')->with($data);
+    }
+
+    public function create($role)
+    {
+
+        if(!in_array($role, $this->roles)) {
+            NotificationHelper::setWarningNotification('Invalid Role');
+            return redirect()->back();
+        }
+        
+        $data = [
+            'title' => 'Create New '.ucfirst($role),
             'gender' => $this->gender,
             'status' => $this->status,
-            'roles'  => $roles
+            'role' => $role
         ];
         return view('cms.user.create')->with($data);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $role)
     {
+        if(!in_array($role, $this->roles)) {
+            NotificationHelper::setWarningNotification('Invalid Role');
+            return redirect()->back();
+        }
         
         $request->validate([
             'last_name' => 'required|max:255',
@@ -80,20 +85,12 @@ class UserController extends Controller
                 'required',
                 Rule::in($this->status),
             ],
-            'dob' => 'required|date',
-            'username' => 'required|unique:users|max:255',
-            'role_id' => 'required',
+            'dob' => 'required|date'
         ]);
 
         try 
         {     
-            DB::transaction(function () use($request) {
-
-                $role = Role::find($request->role_id);
-                if($role ==  null) {
-                    NotificationHelper::setErrorNotification('invalid_role');
-                    return back();
-                }
+            DB::transaction(function () use($request, $role) {
 
                 $image = null;
                 if($request->hasFile('image')) {
@@ -101,22 +98,25 @@ class UserController extends Controller
                 }
                 
                 User::create([
+                    'company_id' => Auth::user()->company_id,
                     'last_name' => $request->last_name,
                     'first_name' => $request->first_name,
-                    'dob' => $request->dob,
-                    'gender' => $request->gender,
-                    'status' => $request->status,
+                    'phone' => $request->phone,
+                    'national_id' => $request->national_id,
+                    'passport_id' => $request->passport_id,
                     'image' => $image,
                     'username' => $request->username,
-                    'phone' => $request->phone,
-                    'password' => Hash::make('123456'), // default password
-                    'role_id' => $request->role_id,
-                    'created_by' => Auth::id(),
+                    'password' => Hash::make($request->password),
+                    'status' => $request->status,
+                    'gender' => $request->gender,
+                    'role' => $role,
+                    'dob' => $request->dob,
+                    'created_by' => Auth::id()
                 ]);
                 
             });
 
-            NotificationHelper::setSuccessNotification('created_success');
+            NotificationHelper::setSuccessNotification('Created '.ucfirst($role).' Success');
             return back();
         } 
         catch (\Exception $e) 
@@ -237,6 +237,78 @@ class UserController extends Controller
             NotificationHelper::errorNotification($e);
             return redirect()->route('user');
         }
+    }
+
+    // Ajax with datatable
+    public function dataTable(Request $request)
+    {
+       
+        $role = $request->role;
+        if(!in_array($role, $this->roles)) {
+            return response()->json([
+                'status' => 0,
+                'msg' => 'invalid role'
+            ]);
+        }
+        
+        $draw = $request['draw'];
+        $row = $request['start'];
+        $rowPerPage = $request['length']; // Rows display per page
+        $columnIndex = $request['order'][0]['column']; // Column index
+        $columnName = $request['columns'][$columnIndex]['data']; // Column name
+        $columnSortOrder = $request['order'][0]['dir']; // asc or desc
+        $searchValue = $request['search']['value']; // Search value
+        
+        
+        //  Search 
+        $searchQuery = " ";
+        if($searchValue != ''){
+            $searchQuery = " and (CONCAT(last_name, '', first_name) like "."'%$searchValue%'".") ";
+        }
+
+        //  Total number of records without filtering
+        $totalRecords = User::count();
+
+        //  Total number of record with filtering
+        $totalRecordwithFilter = User::whereRaw('1=1'.$searchQuery)->where('role', $role)->count();
+        
+        ## Fetch records
+        $records = User::selectRaw("*, CONCAT(last_name, '', first_name) AS name ")
+                    ->whereRaw('1=1'.$searchQuery)
+                    ->where('role', $role)
+                    ->orderBy($columnName, $columnSortOrder)
+                    ->offset($row)
+                    ->limit($rowPerPage)
+                    ->get();
+
+        $data = array();
+
+        foreach($records as $record) {
+            $routeEdit = route('todo.update', ['id' => $record->id]);
+            $routeDelete = route('todo.delete', ['id' => $record->id]);
+            $data[] = [
+                "name" => $record->last_name.' '.$record->first_name,
+                "phone" => $record->phone,
+                "national_id" => $record->national_id,
+                "passport_id" => $record->passport_id,
+                "status" => $record->status,
+                "action" => "<div class='btn-group'>
+                                <a href='$routeEdit' class='btn btn-default btn-sm'><i class='far fa-edit'></i></a>
+                                <button type='button' data-url='$routeDelete' class='btn btn-default btn-sm btn-delete'><i class='fas fa-trash-alt'></i></button>
+                            </div>",
+            ];
+        }
+
+        ## Response
+        $response = [
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecordwithFilter,
+            "iTotalDisplayRecords" => $totalRecords,
+            "aaData" => $data
+        ];
+        
+        return response()->json($response);
+
     }
     
 }

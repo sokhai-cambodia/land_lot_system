@@ -14,7 +14,8 @@ class TodoController extends Controller
 {   
     private $status = ['active', 'inactive'];
     private $contentHeaders = ['name' => 'Dashboard', 'route' => 'cms', 'class' => ''];
-
+    private $type = ['customer', 'witness', 'staff'];
+    
     public function index()
     {
 

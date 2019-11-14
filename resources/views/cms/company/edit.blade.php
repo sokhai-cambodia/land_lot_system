@@ -23,7 +23,7 @@
                     placeholder="Enter Name" value="{{ UtilHelper::hasValue(old('name'), $company->name) }}">
                             </div>
                             <div class="form-group row">
-                                <label for="name">Name</label>
+                                <label for="logo">Logo</label>
                                 <input type="file" name="logo" class="form-control dropify" data-default-file="{{ $company->getLogo() }}">
                                 
                             </div>

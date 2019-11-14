@@ -22,29 +22,29 @@ Class NotificationHelper
      * $message = '';  
      * $type = {'info', 'warning', 'success', 'error'}
      */
-    private static function setNotification($message='default message', $type='error', $isPlainMessage=false)
+    private static function setNotification($message='default message', $type='error', $isPlainMessage=true)
     {
         $msg = $isPlainMessage ? $message : NotificationHelper::cmsMessageLocalization($message);
         Session::flash('message', $msg);
     	Session::flash('type', $type);
     }
 
-    public static function setInfoNotification($message='default message', $isPlainMessage=false)
+    public static function setInfoNotification($message='default message', $isPlainMessage=true)
     {
         NotificationHelper::setNotification($message, NotificationHelper::NOTIFICATION_INFO, $isPlainMessage);
     }
 
-    public static function setSuccessNotification($message='default message', $isPlainMessage=false)
+    public static function setSuccessNotification($message='default message', $isPlainMessage=true)
     {
         NotificationHelper::setNotification($message, NotificationHelper::NOTIFICATION_SUCCESS, $isPlainMessage);
     }
 
-    public static function setWarningNotification($message='default message', $isPlainMessage=false)
+    public static function setWarningNotification($message='default message', $isPlainMessage=true)
     {
         NotificationHelper::setNotification($message, NotificationHelper::NOTIFICATION_WARNING, $isPlainMessage);
     }
 
-    public static function setErrorNotification($message='default message', $isPlainMessage=false)
+    public static function setErrorNotification($message='default message', $isPlainMessage=true)
     {
         NotificationHelper::setNotification($message, NotificationHelper::NOTIFICATION_ERROR, $isPlainMessage);
     }
@@ -65,7 +65,7 @@ Class NotificationHelper
         return NotificationHelper::setErrorNotification('Oop... sorry something wrong..!', true);
     }
 
-    public static function setDeletedPopUp($message='default message', $isPlainMessage=false)
+    public static function setDeletedPopUp($message='default message', $isPlainMessage=true)
     {
         $msg = $isPlainMessage ? $message : NotificationHelper::cmsMessageLocalization($message);
         Session::flash('delete-message', $msg);

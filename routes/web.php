@@ -38,10 +38,12 @@ Route::group(['prefix' => 'cms', 'middleware' => ['auth']], function(){
     // PROFILE
     require_once __DIR__.'/cms/profile.php';
 
-    // Brand
     require_once __DIR__.'/cms/todo.php';
 
     // Comapny
     require_once __DIR__.'/cms/company.php';
+
+    // User
+    require_once __DIR__.'/cms/user.php';
 
 });

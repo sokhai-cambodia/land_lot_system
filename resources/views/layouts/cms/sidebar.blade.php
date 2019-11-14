@@ -50,6 +50,37 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['user.customer'], true) }}">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>
+                            User
+                            <i class="fas fa-angle-left right"></i>
+                            <span class="badge badge-info right">3</span>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('user.customer') }}" class="nav-link {{ UtilHelper::activeSideBar(['user.customer']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Customer</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link {{ UtilHelper::activeSideBar(['define-your-route-name']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Menu 2</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link {{ UtilHelper::activeSideBar(['define-your-route-name']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Menu 3 (Active)</p>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </li>
                 <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['define-your-route-name'], true) }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-copy"></i>
