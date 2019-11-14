@@ -50,13 +50,12 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['user.customer'], true) }}">
+                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['user.customer', 'user.witness', 'user.staff', 'user.deleted-list'], true) }}">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-copy"></i>
+                        <i class="nav-icon fas fa-users"></i>
                         <p>
                             User
                             <i class="fas fa-angle-left right"></i>
-                            <span class="badge badge-info right">3</span>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
@@ -67,15 +66,22 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link {{ UtilHelper::activeSideBar(['define-your-route-name']) }}">
+                            <a href="{{ UtilHelper::route('user.witness') }}" class="nav-link {{ UtilHelper::activeSideBar(['user.witness']) }}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Menu 2</p>
+                                <p>Witness</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ UtilHelper::route('define-your-route-name') }}" class="nav-link {{ UtilHelper::activeSideBar(['define-your-route-name']) }}">
+                            <a href="{{ UtilHelper::route('user.staff') }}" class="nav-link {{ UtilHelper::activeSideBar(['user.staff']) }}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Menu 3 (Active)</p>
+                                <p>Staff</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('user.deleted-list') }}" class="nav-link {{ UtilHelper::activeSideBar(['user.deleted-list']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Deleted List</p>
                             </a>
                         </li>
                         
