@@ -13,7 +13,7 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">{{ $title }}</h3>
-        <a href="{{ UtilHelper::route('document.user.create', ['userId' => $user->id]) }}" class="btn btn-outline-success btn-flat float-right">Upload</a>
+            <a href="{{ UtilHelper::route('document.user.create', ['userId' => $user->id]) }}" class="btn btn-outline-success btn-flat float-right">Upload</a>
         </div>
         <!-- /.card-header -->
         <div class="card-body">

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Cms;
 
+use App\Document;
+use App\DocumentUser;
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
@@ -56,7 +58,6 @@ class UserController extends Controller
 
     public function customer()
     {
-        
         return $this->userList('customer');
     }
 
@@ -417,13 +418,25 @@ class UserController extends Controller
             return response()->json([ 'status' => 0 ]);
         }
 
+        $docUsers = DocumentUser::where('user_id', 39)
+                                ->orderBy('document_id', 'desc')
+                                ->limit(5)
+                                ->pluck('document_id');
+        $docs = Document::whereIn('id', $docUsers)->get();
+        
+        
+
         $modal = view('cms.user.modal-detail')
-                ->with(['row' => $user])
+                ->with([
+                    'row' => $user,
+                    'docs' => $docs
+                ])
                 ->render();
 
         return response()->json([
             'status' => 1,
-            'modal' => $modal
+            'modal' => $modal,
+            'docUsers' => $docUsers
         ]);
     }
     
