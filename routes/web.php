@@ -50,4 +50,7 @@ Route::group(['prefix' => 'cms', 'middleware' => ['auth']], function(){
     // RevenueCost
     require_once __DIR__.'/cms/RevenueCost.php';
 
+    // Document
+    require_once __DIR__.'/cms/document.php';
+
 });

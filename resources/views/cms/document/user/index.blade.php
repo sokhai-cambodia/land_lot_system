@@ -13,29 +13,29 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">{{ $title }}</h3>
-            <a href="{{ UtilHelper::route('user.create', [ 'role' => $role ]) }}" class="btn btn-outline-success btn-flat float-right">Create</a>
+            <a href="{{ UtilHelper::route('document.user.create', ['userId' => $user->id]) }}" class="btn btn-outline-success btn-flat float-right">Upload</a>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
             <table id="dt" class="table table-bordered table-striped">
                 <thead>
                     <tr>
+                        <th>Folder</th>
                         <th>Name</th>
-                        <th>Phone</th>
-                        <th>National Id</th>
-                        <th>Passport id</th>
-                        <th>Status</th>
+                        <th>Description</th>
+                        <th>Extension</th>
+                        <th>Size</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 
                 <tfoot>
                     <tr>
+                        <th>Folder</th>
                         <th>Name</th>
-                        <th>Phone</th>
-                        <th>National Id</th>
-                        <th>Passport id</th>
-                        <th>Status</th>
+                        <th>Description</th>
+                        <th>Extension</th>
+                        <th>Size</th>
                         <th>Action</th>
                     </tr>
                 </tfoot>
@@ -70,18 +70,17 @@
             'serverSide': true,
             'serverMethod': 'post',
             'ajax': {
-                'url': "{{ route('user.data-table') }}",
+                'url': "{{ route('document.user.data-table', ['userId' => $user->id]) }}",
                 "data": {
                     "_token": "{{ csrf_token() }}",
-                    "role": "{{ $role }}"
                 },
             },
             'columns': [
+                { data: 'folder' },
                 { data: 'name' },
-                { data: 'phone' },
-                { data: 'national_id' },
-                { data: 'passport_id' },
-                { data: 'status' },
+                { data: 'description' },
+                { data: 'extension' },
+                { data: 'size' },
                 { data: 'action' },
             ],
             "columnDefs": [
@@ -89,29 +88,6 @@
             ]
         });
 
-        // open modal
-        $("body").on('click', '.btn-view-detail', function(){
-            var id = $(this).attr('data-id');
-            $.ajax({
-                url: "{{ route('user.detail') }}",
-                method: 'post',
-                dataType : 'json',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    "id": id,
-                },
-                success: function(result){
-                    if(result.status == 1) {
-                        $("#view-content").html(result.modal);
-                        $('#view-info').modal('toggle');
-                    } else {
-                        alert('no data');
-                    }
-                    
-                    
-                }
-            })
-        });
     });
 </script>
 @include('layouts.message.delete-confirm')

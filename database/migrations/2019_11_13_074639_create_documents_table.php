@@ -26,6 +26,7 @@ class CreateDocumentsTable extends Migration
             $table->mediumText('original_file_name');
             $table->string('extension', 10);
             $table->integer('size')->default(0);
+            $table->string('unique_code'); // code for note upload file. if same code it mean file upload same time
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();
             $table->integer('deleted_by')->nullable();

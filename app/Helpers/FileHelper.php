@@ -10,7 +10,7 @@ Class FileHelper
     }
 
     public static function getDefaultImage() {
-        return  env('DEFAULT_IMAGE_PATH', 'assets/cms/default.jpg');
+        return  env('DEFAULT_IMAGE_PATH', 'assets/cms/default-img.png');
     }
 
     public static function getLoginImage() {
@@ -23,6 +23,44 @@ Class FileHelper
 
     public static function getFrontEndImage() {
         return  asset(env('DASHBOARD_IMAGE_PATH', 'assets/front-end/logo.png'));
+    }
+
+    private static function icon($extension) {
+        $excel = ["excel", "xlsx"];
+        $pdf = ["pdf"];
+        $word = ["word", "docx"];
+        $image = ["jpeg", "png"];
+
+        // excel file
+        if(in_array($extension, $excel)) {
+            return "excel.png";
+        }
+
+        // pdf file
+        if(in_array($extension, $pdf)) {
+            return "pdf.png";
+        }
+
+        // word file
+        if(in_array($extension, $word)) {
+            return "word.png";
+        }
+
+        // image file
+        if(in_array($extension, $image)) {
+            return "picture.png";
+        }
+
+        return "file.png";
+
+    
+
+    }
+
+    public static function getFileIcon($extension) {
+        $extension = FileHelper::icon($extension);
+
+        return  asset(env('DASHBOARD_ICON_PATH', 'assets/cms/icon/'.$extension));
     }
 
     public static function upload($file, $pathName = '') {

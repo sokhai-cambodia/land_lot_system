@@ -10,7 +10,7 @@
                     <ol class="breadcrumb float-sm-right">
                         @foreach ($contentHeaders as $contentHeader)
                             @if($contentHeader['class'] != 'active')
-                                <li class="breadcrumb-item"><a href="{{ UtilHelper::route($contentHeader['route']) }}">{{ $contentHeader['name'] }}</a></li>    
+                                <li class="breadcrumb-item"><a href="{{ UtilHelper::route($contentHeader['route'], isset($contentHeader['routeParam']) ? $contentHeader['routeParam'] : [] ) }}">{{ $contentHeader['name'] }}</a></li>    
                             @else
                                 <li class="breadcrumb-item active">{{ $contentHeader['name'] }}</li>
                             @endif
