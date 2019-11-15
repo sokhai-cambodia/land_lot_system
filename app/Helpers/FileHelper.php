@@ -10,7 +10,7 @@ Class FileHelper
     }
 
     public static function getDefaultImage() {
-        return  env('DEFAULT_IMAGE_PATH', 'assets/cms/default.jpg');
+        return  env('DEFAULT_IMAGE_PATH', 'assets/cms/default-img.png');
     }
 
     public static function getLoginImage() {
