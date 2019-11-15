@@ -90,7 +90,7 @@
                 {{-- Land --}}
                 <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['user.customer', 'user.witness', 'user.staff', 'user.deleted-list'], true) }}">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
+                        <i class="nav-icon fas fa-map-marked-alt"></i>
                         <p>
                             Land
                             <i class="fas fa-angle-left right"></i>
@@ -116,7 +116,7 @@
                 {{-- Land --}}
                 <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['user.customer', 'user.witness', 'user.staff', 'user.deleted-list'], true) }}">
                         <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-users"></i>
+                            <i class="nav-icon fas fa-money-check-alt"></i>
                             <p>
                                 Revenue Cose
                                 <i class="fas fa-angle-left right"></i>
