@@ -23,16 +23,12 @@
                                 <input type="name" class="form-control" name="title" id="title" placeholder="Enter title" value="{{ UtilHelper::hasValue(old('title'), "") }}">
                             </div>
                             <div class="form-group">
-                                <label for="title">Title</label>
-                                <input type="number" class="form-control" name="size" id="size" placeholder="Enter size" value="{{ UtilHelper::hasValue(old('size'), "") }}">
-                            </div>
-                            <div class="form-group">
                                 <label for="size">Size</label>
-                                <input type="number" class="form-control" name="width" id="width" placeholder="Enter width" value="{{ UtilHelper::hasValue(old('width'), "") }}">
+                                <input type="number" class="form-control" name="size" id="size" placeholder="Enter size" value="{{ UtilHelper::hasValue(old('size'), "") }}">
                             </div>
                             <div class="form-group">
-                                <label for="title">Width</label>
-                                <input type="number" class="form-control" name="size" id="size" placeholder="Enter size" value="{{ UtilHelper::hasValue(old('size'), "") }}">
+                                <label for="width">Width</label>
+                                <input type="number" class="form-control" name="width" id="width" placeholder="Enter width" value="{{ UtilHelper::hasValue(old('width'), "") }}">
                             </div>
                             <div class="form-group">
                                 <label for="height">Height</label>
