@@ -8,15 +8,19 @@ use Illuminate\Http\Request;
 
 use Auth;
 use App\Land;
+use App\RevenueCost;
 use NotificationHelper;
 use FileHelper;
 
 class LandController extends Controller
 {
+
     private $status = ['booked', 'sold', 'on_sale'];
     private $type = ['land', 'land_lot'];
     private $contentHeaders = ['name' => 'Dashboard', 'route' => 'cms', 'class' => ''];
     private $location=['Phnom Penh','Prey Veng','Banteay Meanchey','Battambang','Kampong Cham','Kampong Chhnang'];
+
+   
     /**
      * Display a listing of the resource.
      *
@@ -106,7 +110,7 @@ class LandController extends Controller
                 'created_by' => Auth::id()
             ]);
                 
-            NotificationHelper::setSuccessNotification('created_success');
+            NotificationHelper::setSuccessNotification('Created Land success');
             return redirect()->route('land');
 
         } 
@@ -210,7 +214,7 @@ class LandController extends Controller
             $land->status = $request->status;
             $land->created_by = Auth::id();
             $land->save();
-            NotificationHelper::setSuccessNotification('updated_success');
+            NotificationHelper::setSuccessNotification('Updated Land success');
             return redirect()->route('land');
 
            
@@ -229,10 +233,12 @@ class LandController extends Controller
      * @param  \App\Land  $land
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Land $land)
+    public function destroy(int $id)
     {
         //
+       
     }
+
      // Ajax with datatable
     public function dataTable(Request $request)
      {
@@ -356,7 +362,7 @@ class LandController extends Controller
             $data[] = [
                 "title" => $record->title,
                 "description" => $record->description,
-                "size"=>$record->size,
+                "size"=> $record->size,
                 "width"=>$record->width,
                 "height"=>$record->width,
                 "qty"=>$record->width,
