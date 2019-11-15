@@ -17,7 +17,7 @@ class CreateLandsTable extends Migration
             $table->engine = 'InnoDB';
             $table->charset = 'utf8';
             $table->collation = 'utf8_unicode_ci';
-
+            
             $table->bigIncrements('id');
             $table->integer('company_id');
             $table->string('title');
