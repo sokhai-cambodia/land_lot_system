@@ -85,7 +85,7 @@
                 { data: 'action' },
             ],
             "columnDefs": [
-                { "orderable": false, "targets": 3 }
+                { "orderable": false, "targets": 5 }
             ]
         });
 
