@@ -26,6 +26,7 @@ class CreateLegalServiceProcessesTable extends Migration
             $table->dateTime('finished_date');
             $table->tinyInteger('is_continue')->default(1); // track this service need to process more or not
             $table->mediumText('note')->nullable();
+            $table->enum('staus', ['done', 'on_process'])->default('on_process');
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();
             $table->integer('deleted_by')->nullable();

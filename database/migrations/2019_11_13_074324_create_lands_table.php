@@ -25,7 +25,7 @@ class CreateLandsTable extends Migration
             $table->double('size', 19, 2); //m2
             $table->double('width', 19, 2); //m
             $table->double('height', 19, 2); //m
-            $table->integer('qty');//
+            $table->integer('qty')->default(0); // track how many land lot does this land have 
             $table->double('price', 19, 2); 
             $table->smallInteger('commission')->default(0); // 0 - 100 
             $table->mediumText('location');
