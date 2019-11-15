@@ -381,7 +381,7 @@ class UserController extends Controller
                     ->get();
 
         $data = array();
-
+        
         foreach($records as $record) {
             $routeToggle = route('user.toggle', ['role' => $record->role, 'id' => $record->id]);
             $data[] = [

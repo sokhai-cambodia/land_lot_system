@@ -87,6 +87,31 @@
                         
                     </ul>
                 </li>
+                {{-- Land --}}
+                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['user.customer', 'user.witness', 'user.staff', 'user.deleted-list'], true) }}">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            Land
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('land') }}" class="nav-link {{ UtilHelper::activeSideBar(['land']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Land List</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('land.landlot') }}" class="nav-link {{ UtilHelper::activeSideBar(['land.landlot']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>LandLot List</p>
+                            </a>
+                        </li>
+                       
+                    </ul>
+                </li>
                 <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['define-your-route-name'], true) }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-copy"></i>
