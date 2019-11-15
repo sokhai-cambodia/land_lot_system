@@ -39,19 +39,12 @@ class LandController extends Controller
         return view('cms.land.index')->with($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // Create Land
     public function create()
     {
-        //
         $data = [
             'title' => 'Create Land',
             'status' => $this->status,
-            'type'=>$this->type,
-            'location'=>$this->location,
             'contentHeaders' => [
                 $this->contentHeaders,
                 ['name' => 'Land', 'route' => 'land', 'class' => 'active']
@@ -60,36 +53,29 @@ class LandController extends Controller
         return view('cms.land.create')->with($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    // Save Land
     public function store(Request $request)
     {
        
         //
         $request->validate([
             'title' => 'required|max:255|unique:lands',
-            'size' =>'required|max:255',
-            'width' => 'required|max:255',
-            'height' => 'required|max:255',
-            'qty' => 'required|max:255',
-            'price' => 'required|max:255',
-            'commission' => 'required|max:255',
-            
+            'size' =>'required|min:0',
+            'width' => 'required|min:0',
+            'height' => 'required|min:0',
+            'price' => 'required|min:0',
+            'commission' => 'required|min:0|max:100',
+            'status' => [
+                'required',
+                Rule::in($this->status),
+            ],
         ]);
 
         try 
         {     
             $image = null;
-                if($request->hasFile('image')) {
-                    $image = FileHelper::upload($request->image);
-                }
-            $lot=0;
-            if($request->type=="land_lot"){
-                $lot=1;
+            if($request->hasFile('image')) {
+                $image = FileHelper::upload($request->image);
             }
             // Save Land
             Land::create([
@@ -99,12 +85,12 @@ class LandController extends Controller
                 'size' => $request->size,
                 'width' => $request->width,
                 'height' => $request->height,
-                'qty' => $request->qty,
+                'qty' => 0,
                 'price' => $request->price,
                 'commission' => $request->commission,
                 'location' => $request->location,
-                'type' => $request->type,
-                'is_split_land_lot'=>$lot,
+                'type' => 'land',
+                'is_split_land_lot'=> 0,
                 'image' => $image,
                 'status' => $request->status,
                 'created_by' => Auth::id()
@@ -116,41 +102,19 @@ class LandController extends Controller
         } 
         catch (\Exception $e) 
         {
-            dd($e);
             NotificationHelper::errorNotification($e);
             return back()->withInput();
         }
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Land  $land
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Land $land)
-    {
-        //
-         
-       
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Land  $land
-     * @return \Illuminate\Http\Response
-     */
+    // Edit land
     public function edit(int $land)
     {
-        //
         $row = Land::findOrFail($land);
         $data = [
             'title' => 'Edit Land',
             'status' => $this->status,
-            'type'=>$this->type,
-            'location'=>$this->location,
             'row'  => $row,
             'contentHeaders' => [
                 $this->contentHeaders,
@@ -162,57 +126,44 @@ class LandController extends Controller
         return view('cms.land.edit')->with($data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Land  $land
-     * @return \Illuminate\Http\Response
-     */
+    // Update Land
     public function update(Request $request, int $id)
     {
         //
         $request->validate([
             'title' => [
-            'required',
-            'max:255',
+                'required',
+                'max:255',
                 Rule::unique('lands')->ignore($id),
             ],
-            'size' =>'required|max:255',
-            'width' => 'required|max:255',
-            'height' => 'required|max:255',
-            'qty' => 'required|max:255',
-            'price' => 'required|max:255',
-            'commission' => 'required|max:255',
+            'size' =>'required|min:0',
+            'width' => 'required|min:0',
+            'height' => 'required|min:0',
+            'price' => 'required|min:0',
+            'commission' => 'required|min:0|max:100',
+            'status' => [
+                'required',
+                Rule::in($this->status),
+            ],
         ]);
 
         try 
         {
-            $image = null;
-            if($request->hasFile('image')) {
-                $image = FileHelper::upload($request->image);
-            }
-            $lot=0;
-            if($request->type=="land_lot"){
-                $lot=1;
-            }
             $land = Land::findOrFail($id);
+            if($request->hasFile('image')) {
+                $land->image = FileHelper::updateImage($request->image, $land->image, '');
+            }
 
-            $land->company_id = Auth::user()->company_id;
             $land->title = $request->title;
-            $land->description=$request->description;
-            $land->size= $request->size;
+            $land->description = $request->description;
+            $land->size = $request->size;
             $land->width = $request->width;
             $land->height = $request->height;
-            $land->qty = $request->qty;
             $land->price = $request->price;
             $land->commission = $request->commission;
-            $land->location =$request->location;
-            $land->type = $request->type;
-            $land->is_split_land_lot=$lot;
-            $land->image =$image;
+            $land->location = $request->location;
             $land->status = $request->status;
-            $land->created_by = Auth::id();
+            $land->updated_by = Auth::id();
             $land->save();
             NotificationHelper::setSuccessNotification('Updated Land success');
             return redirect()->route('land');

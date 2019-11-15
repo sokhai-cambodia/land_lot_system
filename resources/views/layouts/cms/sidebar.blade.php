@@ -88,7 +88,7 @@
                     </ul>
                 </li>
                 {{-- Land --}}
-                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['user.customer', 'user.witness', 'user.staff', 'user.deleted-list'], true) }}">
+                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['land.create'], true) }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-map-marked-alt"></i>
                         <p>
@@ -97,6 +97,12 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('land.create') }}" class="nav-link {{ UtilHelper::activeSideBar(['land.create']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Create Land</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="{{ UtilHelper::route('land') }}" class="nav-link {{ UtilHelper::activeSideBar(['land']) }}">
                                 <i class="far fa-circle nav-icon"></i>
@@ -114,7 +120,7 @@
                 </li>
                 {{-- Revenue --}}
                 {{-- Land --}}
-                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['user.customer', 'user.witness', 'user.staff', 'user.deleted-list'], true) }}">
+                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar([], true) }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-money-check-alt"></i>
                             <p>
