@@ -11,6 +11,7 @@ use Auth;
 use DB;
 use NotificationHelper;
 use File;
+use FileHelper;
 
 class DocumentUserController extends Controller
 {
@@ -82,8 +83,9 @@ class DocumentUserController extends Controller
                             'unique_code' => $unique_code,
                             'created_by' => Auth::id()
                         ];
-                        $uploadedPath[] = public_path().$folder.'/'.$filename;
-                        $file->move(public_path().$folder, $filename);
+                        $uploadName = Auth::id().'-'.time().'-'.uniqid().$filename;
+                        $uploadedPath[] = public_path().$folder.'/'.$uploadName;
+                        $file->move(public_path().$folder, $uploadName);
                         $ind++;
                     }
                 }
@@ -169,11 +171,13 @@ class DocumentUserController extends Controller
         $data = array();
 
         foreach($records as $record) {
+            $extension = FileHelper::getFileIcon($record->extension);
+
             $data[] = [
                 "folder" => $record->folder,
                 "name" => $record->name,
                 "description" => $record->description,
-                "extension" => $record->extension,
+                "extension" => "<img src='$extension' alt='$record->extension' style='width: 30px; height: 30px'/>",
                 "size" => $record->size,
                 "action" => "<div class='btn-group'>
                                 <a href='#' class='btn btn-default btn-sm' title='Edit'><i class='far fa-edit'></i></a>
