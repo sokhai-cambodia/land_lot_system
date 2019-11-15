@@ -21,6 +21,11 @@ class DocumentUserController extends Controller
     {
 
         $user = User::find($userId);
+        if($user == null) {
+            NotificationHelper::setErrorNotification('Invalid User');
+            return redirect()->back();
+        }
+
         $data = [
             'title' => 'List Document User',
             'contentHeaders' => [
@@ -36,6 +41,11 @@ class DocumentUserController extends Controller
     public function create($userId)
     {
         $user = User::find($userId);
+        if($user == null) {
+            NotificationHelper::setErrorNotification('Invalid User');
+            return redirect()->back();
+        }
+
         $data = [
             'title' => 'Upload Document',
             'contentHeaders' => [
@@ -51,6 +61,10 @@ class DocumentUserController extends Controller
     public function store(Request $request, $userId) 
     {
         $user = User::find($userId);
+        if($user == null) {
+            NotificationHelper::setErrorNotification('Invalid User');
+            return redirect()->back();
+        }
         
         $request->validate([
             'files' => 'required|min:1',
@@ -131,7 +145,17 @@ class DocumentUserController extends Controller
     {
         
         $user = User::find($userId);
+        if($user == null) {
+            NotificationHelper::setErrorNotification('Invalid User');
+            return redirect()->back();
+        }
+
         $doc = Document::find($id);
+        if($doc == null) {
+            NotificationHelper::setErrorNotification('Invalid Document');
+            return redirect()->back();
+        }
+
         
         $data = [
             'title' => 'Upload Document',
@@ -148,14 +172,23 @@ class DocumentUserController extends Controller
 
     public function update(Request $request, $userId, $id) 
     {
-        $user = User::find($userId);
         
         $request->validate([
             'name' => 'required',
             'description' => 'required',
         ]);
         
+        $user = User::find($userId);
+        if($user == null) {
+            NotificationHelper::setErrorNotification('Invalid User');
+            return redirect()->back();
+        }
+        
         $doc = Document::find($id);
+        if($doc == null) {
+            NotificationHelper::setErrorNotification('Invalid Document');
+            return redirect()->back();
+        }
         $doc->name = $request->name;
         $doc->description = $request->description;
         $doc->save();
@@ -171,6 +204,10 @@ class DocumentUserController extends Controller
        
 
         $user = User::find($userId);
+        if($user == null) {
+            NotificationHelper::setErrorNotification('Invalid User');
+            return redirect()->back();
+        }
         
         $draw = $request['draw'];
         $row = $request['start'];
