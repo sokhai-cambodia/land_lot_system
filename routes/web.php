@@ -49,6 +49,8 @@ Route::group(['prefix' => 'cms', 'middleware' => ['auth']], function(){
     require_once __DIR__.'/cms/land.php';
     // RevenueCost
     require_once __DIR__.'/cms/RevenueCost.php';
+    // RevenueCostDetail
+    require_once __DIR__.'/cms/RevenueCostDetail.php';
 
     // Document
     require_once __DIR__.'/cms/document.php';

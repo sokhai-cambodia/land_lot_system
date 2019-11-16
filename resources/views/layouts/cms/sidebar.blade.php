@@ -88,7 +88,7 @@
                     </ul>
                 </li>
                 {{-- Land --}}
-                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['user.customer', 'user.witness', 'user.staff', 'user.deleted-list'], true) }}">
+                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['land', 'land.landlot'], true) }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
@@ -114,7 +114,7 @@
                 </li>
                 {{-- Revenue --}}
                 {{-- Land --}}
-                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['user.customer', 'user.witness', 'user.staff', 'user.deleted-list'], true) }}">
+                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['revenue-cost'], true) }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-users"></i>
                             <p>

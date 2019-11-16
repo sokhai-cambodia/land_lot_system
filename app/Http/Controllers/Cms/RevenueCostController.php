@@ -232,6 +232,7 @@ class RevenueCostController extends Controller
 
         foreach($records as $record) {
             $routeEdit = route('revenue-cost.update', ['id' => $record->id]);
+            $routeDetail = route('revenue-cost-detail', ['revenueId' => $record->id]);
             $routeDelete = route('revenue-cost.delete', ['id' => $record->id]);
             $data[] = [
                 "name" => $record->name,
@@ -240,7 +241,9 @@ class RevenueCostController extends Controller
                 "action" => "<div class='btn-group'>
                                 <a href='$routeEdit' class='btn btn-default btn-sm'><i class='far fa-edit'></i></a>
                                 <button type='button' data-url='$routeDelete' class='btn btn-default btn-sm btn-delete'><i class='fas fa-trash-alt'></i></button>
-                            </div>",
+                                <a href='$routeDetail' class='btn btn-default btn-sm'><i class='far fa-eye'></i></a>
+
+                                </div>",
             ];
         }
 
