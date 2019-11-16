@@ -18,15 +18,14 @@ class LandController extends Controller
     private $status = ['booked', 'sold', 'on_sale'];
     private $contentHeaders = ['name' => 'Dashboard', 'route' => 'cms', 'class' => ''];
    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // land list
     public function index()
     {
-        //
-        $lands = Land::orderBy('id', 'desc')
+        // TODO: query by condition
+        // query lands
+        $lands = Land::where('type', 'land')
+                        ->where('is_split_land_lot', 0)
+                        ->orderBy('id', 'desc')
                         ->paginate(12);
         $data = [
             'title' => 'List Lands',
@@ -284,92 +283,25 @@ class LandController extends Controller
         }
     }
     
-    public function destroy(int $id)
+    //Land lot List
+    public function landLot()
     {
-        //
-       
-    }
-
-     // Ajax with datatable
-    public function dataTable(Request $request)
-     {
-         $draw = $request['draw'];
-         $row = $request['start'];
-         $rowPerPage = $request['length']; // Rows display per page
-         $columnIndex = $request['order'][0]['column']; // Column index
-         $columnName = $request['columns'][$columnIndex]['data']; // Column name
-         $columnSortOrder = $request['order'][0]['dir']; // asc or desc
-         $searchValue = $request['search']['value']; // Search value
-         
-         
-         //  Search 
-         $searchQuery = " ";
-         if($searchValue != ''){
-             $searchQuery = " and (title like "."'%$searchValue%'".") ";
-         }
- 
-         //  Total number of records without filtering
-         $totalRecords = Land::count();
- 
-         //  Total number of record with filtering
-         $totalRecordwithFilter = Land::whereRaw('1=1'.$searchQuery)
-         ->where('type', 'land')
-         ->count();
-         
-         ## Fetch records
-         $records = Land::whereRaw('1=1'.$searchQuery)
-                     ->where('type', 'land')
-                     ->orderBy($columnName, $columnSortOrder)
-                     ->offset($row)
-                     ->limit($rowPerPage)
-                     ->get();
- 
-         $data = array();
- 
-         foreach($records as $record) {
-             $routeEdit = route('land.update', ['id' => $record->id]);
-             $routeDelete = route('land.delete', ['id' => $record->id]);
-             $data[] = [
-                 "title" => $record->title,
-                 "description" => $record->description,
-                 "size"=>$record->size,
-                 "width"=>$record->width,
-                 "height"=>$record->width,
-                 "qty"=>$record->width,
-                 "price"=>$record->price,
-                 "commission"=>$record->commission,
-                 "location"=>$record->location,
-                 "type" => $record->type,
-                 "status" => $record->status,
-                 "action" => "<div class='btn-group'>
-                 <a href='$routeEdit' class='btn btn-default btn-sm'><i class='far fa-edit'></i></a>
-                </div>",
-             ];
-         }
- 
-         ## Response
-         $response = [
-             "draw" => intval($draw),
-             "iTotalRecords" => $totalRecordwithFilter,
-             "iTotalDisplayRecords" => $totalRecords,
-             "aaData" => $data
-         ];
-         
-         return response()->json($response);
- 
-     }
-     //Land lot
-     public function landLot()
-     {
-         //
-         $data = [
-             'title' => 'List LandLots',
-             'contentHeaders' => [
-                 $this->contentHeaders,
-                 ['name' => 'LandLot', 'route' => 'land.landlot', 'class' => 'active']
-             ],
-         ];
-         return view('cms.land.landlot')->with($data);
+        // TODO: query by condition
+        // query land lots
+        $lands = Land::where('type', 'land')
+                        ->where('is_split_land_lot', 1)
+                        ->orderBy('id', 'desc')
+                        ->paginate(12);
+        $data = [
+            'title' => 'List LandLots',
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'LandLot', 'route' => 'land.landlot', 'class' => 'active']
+            ],
+            'status' => $this->status,
+            'lands' => $lands
+        ];
+        return view('cms.land.landlot')->with($data);
      }
       // Ajax with datatable
     public function dataTableLandLot(Request $request)

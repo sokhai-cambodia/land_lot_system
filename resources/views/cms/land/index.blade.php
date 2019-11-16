@@ -98,10 +98,16 @@
                         <div class="card-footer">
                             <div class="text-right">
                                 <a href="#" class="btn btn-sm bg-teal">
-                                <i class="fas fa-comments"></i>
+                                    Buy
+                                </a>
+                                <a href="#" class="btn btn-sm bg-teal">
+                                    Installment
+                                </a>
+                                <a href="{{ route('land.update', ['id' => $land->id])}}" class="btn btn-sm bg-teal">
+                                    <i class="fas fa-edit"></i>
                                 </a>
                                 <a href="#" class="btn btn-sm btn-primary">
-                                <i class="fas fa-user"></i> View Profile
+                                    <i class="fas fa-user"></i> View Info
                                 </a>
                             </div>
                         </div>

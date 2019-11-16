@@ -88,11 +88,11 @@
                     </ul>
                 </li>
                 {{-- Land --}}
-                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['land.create', 'land.lot.create'], true) }}">
+                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['land', 'land.landlot', 'land.create', 'land.lot.create'], true) }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-map-marked-alt"></i>
                         <p>
-                            Land
+                            Landadd
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
