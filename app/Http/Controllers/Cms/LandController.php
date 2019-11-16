@@ -16,10 +16,7 @@ class LandController extends Controller
 {
 
     private $status = ['booked', 'sold', 'on_sale'];
-    private $type = ['land', 'land_lot'];
     private $contentHeaders = ['name' => 'Dashboard', 'route' => 'cms', 'class' => ''];
-    private $location=['Phnom Penh','Prey Veng','Banteay Meanchey','Battambang','Kampong Cham','Kampong Chhnang'];
-
    
     /**
      * Display a listing of the resource.
@@ -29,12 +26,16 @@ class LandController extends Controller
     public function index()
     {
         //
+        $lands = Land::orderBy('id', 'desc')
+                        ->paginate(12);
         $data = [
             'title' => 'List Lands',
             'contentHeaders' => [
                 $this->contentHeaders,
                 ['name' => 'Land', 'route' => 'land', 'class' => 'active']
             ],
+            'status' => $this->status,
+            'lands' => $lands
         ];
         return view('cms.land.index')->with($data);
     }
