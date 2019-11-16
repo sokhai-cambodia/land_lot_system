@@ -76,7 +76,7 @@
         <div class="row">
             <div class="col-md-12">
                 <!-- general form elements -->
-                <form role="form" action="{{ route('land.create') }}" method="POST" enctype="multipart/form-data">
+                <form role="form" action="{{ route('land.lot.create') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     {{-- Create Land --}}
                     <div class="card card-primary setup-content" id="step-1">
@@ -92,15 +92,15 @@
                                     <input type="name" class="form-control" name="title" id="title" placeholder="Enter title" value="{{ UtilHelper::hasValue(old('title'), "") }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="width">Width</label>
+                                    <label for="width">Width (m)</label>
                                     <input type="number" class="form-control" minlength="0" step="0.01" name="width" id="width" placeholder="Enter width" value="{{ UtilHelper::hasValue(old('width'), "") }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="height">Height</label>
+                                    <label for="height">Height (m)</label>
                                     <input type="number" class="form-control" minlength="0" step="0.01" name="height" id="height" placeholder="Enter height" value="{{ UtilHelper::hasValue(old('height'), "") }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="size">Size</label>
+                                    <label for="size">Size (m2)</label>
                                     <input type="number" class="form-control" minlength="0" step="0.01" name="size" id="size" placeholder="Enter size" value="{{ UtilHelper::hasValue(old('size'), "") }}">
                                 </div>
                                 {{-- <div class="form-group">
@@ -151,24 +151,24 @@
                         <!-- form start -->
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="g-width">Width</label>
-                                    <input type="number" class="form-control" minlength="0" step="0.01" name="g-width" id="g-width" placeholder="Land width" value="{{ UtilHelper::hasValue(old('g-width'), 0) }}">
+                                    <label for="g_width">Width (m)</label>
+                                    <input type="number" class="form-control" minlength="0" step="0.01" name="g_width" id="g_width" placeholder="Land width" value="{{ UtilHelper::hasValue(old('g_width'), 0) }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="g-height">Height</label>
-                                    <input type="number" class="form-control" minlength="0" step="0.01" name="g-height" id="g-height" placeholder="Land height" value="{{ UtilHelper::hasValue(old('g-height'), 0) }}">
+                                    <label for="g_height">Height (m)</label>
+                                    <input type="number" class="form-control" minlength="0" step="0.01" name="g_height" id="g_height" placeholder="Land height" value="{{ UtilHelper::hasValue(old('g_height'), 0) }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="g-size">Size</label>
-                                    <input type="number" class="form-control" minlength="0" step="0.01" name="g-size" id="g-size" placeholder="Land size" value="{{ UtilHelper::hasValue(old('g-size'), 0) }}">
+                                    <label for="g_size">Size (m2)</label>
+                                    <input type="number" class="form-control" minlength="0" step="0.01" name="g_size" id="g_size" placeholder="Land size" value="{{ UtilHelper::hasValue(old('g_size'), 0) }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="g-price">Price</label>
-                                    <input type="number" minlength="0" step="0.01" class="form-control" name="g-price" id="g-price" placeholder="Enter price" value="{{ UtilHelper::hasValue(old('g-price'), 0) }}">
+                                    <label for="g_price">Price</label>
+                                    <input type="number" minlength="0" step="0.01" class="form-control" name="g_price" id="g_price" placeholder="Enter price" value="{{ UtilHelper::hasValue(old('g_price'), 0) }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="g-commission">Commission (%)</label>
-                                    <input type="number" class="form-control" minlength="0" max="100" step="0.01" name="g-commission" id="g-commission" placeholder="Enter commission" value="{{ UtilHelper::hasValue(old('g-commission'), 0) }}">
+                                    <label for="g_commission">Commission (%)</label>
+                                    <input type="number" class="form-control" minlength="0" max="100" step="0.01" name="g_commission" id="g_commission" placeholder="Enter commission" value="{{ UtilHelper::hasValue(old('g_commission'), 0) }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="price">Generate Land Lot Qty</label>
@@ -200,13 +200,13 @@
                                             Title
                                         </th>
                                         <th style="width: 15%">
-                                            Width
+                                            Width (m)
                                         </th>
                                         <th style="width: 15%">
-                                            Height
+                                            Height (m)
                                         </th>
                                         <th style="width: 15%">
-                                            Size
+                                            Size (m2)
                                         </th>
                                         <th style="width: 15%">
                                             Price
@@ -291,11 +291,11 @@ $('div.setup-panel div a.btn-success').trigger('click');
 
 function generateLandLot() {
 
-    var width = $("#g-width").val();
-    var height = $("#g-height").val();
-    var size = $("#g-size").val();
-    var price = $("#g-price").val();
-    var commission = $("#g-commission").val();
+    var width = $("#g_width").val();
+    var height = $("#g_height").val();
+    var size = $("#g_size").val();
+    var price = $("#g_price").val();
+    var commission = $("#g_commission").val();
     var qty = $("#qty").val();
     if(width == "" || height == "" || size == "" || price == "" || commission == "" || qty == "" ) {
         alert("please input data");
@@ -310,32 +310,32 @@ function generateLandLot() {
             </td>
             <td>
                 <div class="form-group">
-                    <input type="text" class="form-control" name="ll-title[]" id="ll-title" placeholder="title" value="${title + " " + i}" />
+                    <input type="text" class="form-control" name="ll_titles[]" id="ll_title" placeholder="title" value="${title + " " + i}" />
                 </div>
             </td>
             <td>
                 <div class="form-group">
-                    <input type="number" class="form-control" minlength="0" step="0.01" name="ll-width" id="ll-width" placeholder="width" value="${width}">
+                    <input type="number" class="form-control" minlength="0" step="0.01" name="ll_widths[]" id="ll_width" placeholder="width" value="${width}">
                 </div>
             </td>
             <td>
                 <div class="form-group">
-                    <input type="number" class="form-control" minlength="0" step="0.01" name="ll-height" id="ll-height" placeholder="height" value="${height}">
+                    <input type="number" class="form-control" minlength="0" step="0.01" name="ll_heights[]" id="ll_height" placeholder="height" value="${height}">
                 </div>
             </td>
             <td>
                 <div class="form-group">
-                    <input type="number" class="form-control" minlength="0" step="0.01" name="ll-size" id="ll-size" placeholder="size" value="${size}">
+                    <input type="number" class="form-control" minlength="0" step="0.01" name="ll_sizes[]" id="ll_size" placeholder="size" value="${size}">
                 </div>
             </td>
             <td>
                 <div class="form-group">
-                    <input type="number" class="form-control" minlength="0" step="0.01" name="ll-price" id="ll-price" placeholder="price" value="${price}">
+                    <input type="number" class="form-control" minlength="0" step="0.01" name="ll_prices[]" id="ll_price" placeholder="price" value="${price}">
                 </div>
             </td>
             <td>
                 <div class="form-group">
-                    <input type="number" class="form-control" minlength="0" maxlength="100" name="ll-commission" id="ll-commission" placeholder="commission" value="${commission}">
+                    <input type="number" class="form-control" minlength="0" maxlength="100" name="ll_commissions[]" id="ll_commission" placeholder="commission" value="${commission}">
                 </div>
             </td>
         </tr>`;
