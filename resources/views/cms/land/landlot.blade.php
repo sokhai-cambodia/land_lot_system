@@ -13,7 +13,7 @@
     <!-- Default box -->
     <div class="card card-solid">
         <div class="card-header">
-            <form action="{{ route('land.landlot') }}" method="GET">
+            <form action="{{ route('land.landlot', ['id' => $id]) }}" method="GET">
                 <div class="row">
                     <div class="col-sm-2">
                         <input type="number" class="form-control" step="0.01" name="f_width" id="f_width" placeholder="From Width">

@@ -1,4 +1,3 @@
-
 @extends('layouts.cms.template', compact('title'))
 
 @section('header')
@@ -48,14 +47,22 @@
                     <div class="col-sm-2">
                         <input type="name" class="form-control" name="title" id="title" placeholder="Title">
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-1">
                         <select name="status" id="status" class="form-control">
-                            <option value="">Select Status</option>
+                            <option value="">Status</option>
                             @foreach ($status as $s)
                                 @php 
                                     $sSelected = UtilHelper::hasValue(old('status'), "");
                                 @endphp
                                 <option value="{{ $s }}" {{  UtilHelper::selected($s, $sSelected) }}>{{ $s }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-sm-1">
+                        <select name="landType" id="landType" class="form-control">
+                            <option value="">Type</option>
+                            @foreach ($landType as $s)
+                                <option value="{{ $s['key'] }}" {{ $filter['landType'] != "" ? UtilHelper::selected($s['key'], $filter['landType']) : "" }}>{{ $s['value'] }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -82,7 +89,7 @@
                                         Size(m2): {{ $land->size }} <br>
                                         Price($): {{ $land->price }} <br>
                                         Commission(%): {{ $land->commission }} <br>
-                                        Type: {{ ucfirst($land->type) }} <br>
+                                        Type: {{ ucfirst($land->type) }} {{ $land->is_split_land_lot ? "(has land lot)" : "" }} <br>
                                         Status: {{ ucfirst($land->status) }}
                                     </p>
                                     <ul class="ml-4 mb-0 fa-ul text-muted">
@@ -97,18 +104,28 @@
                         </div>
                         <div class="card-footer">
                             <div class="text-right">
-                                <a href="#" class="btn btn-sm bg-teal">
-                                    Buy
-                                </a>
-                                <a href="#" class="btn btn-sm bg-teal">
-                                    Installment
-                                </a>
-                                <a href="{{ route('land.update', ['id' => $land->id])}}" class="btn btn-sm bg-teal">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="#" class="btn btn-sm btn-primary">
-                                    <i class="fas fa-user"></i> View Info
-                                </a>
+                                @if(!$land->is_split_land_lot)
+                                    <a href="#" class="btn btn-sm bg-teal">
+                                        Buy
+                                    </a>
+                                    <a href="#" class="btn btn-sm bg-teal">
+                                        Installment
+                                    </a>
+                                    <a href="{{ route('land.update', ['id' => $land->id])}}" class="btn btn-sm bg-teal">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-user"></i> View Info
+                                    </a>
+                                @else 
+                                    <a href="{{ route('land.update', ['id' => $land->id])}}" class="btn btn-sm bg-teal">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{{ route('land.landlot', ['id' => $land->id])}}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-user"></i> View Land Lot
+                                    </a>
+                                @endif
+
                             </div>
                         </div>
                     </div>
