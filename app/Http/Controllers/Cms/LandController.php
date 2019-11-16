@@ -178,12 +178,27 @@ class LandController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Land  $land
-     * @return \Illuminate\Http\Response
-     */
+    
+    // Create Land Lot
+    public function createLandLot()
+    {
+        $data = [
+            'title' => 'Create Land Lot',
+            'status' => $this->status,
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'Land', 'route' => 'land', 'class' => 'active']
+            ],
+        ];
+        return view('cms.land.create-land-lot')->with($data);
+    }
+
+    // Save Land Lot
+    public function storeLandLot(Request $request)
+    {
+        dd("save land-lot");
+    }
+    
     public function destroy(int $id)
     {
         //

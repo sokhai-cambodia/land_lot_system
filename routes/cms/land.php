@@ -5,7 +5,9 @@ Route::group(['prefix' => 'land'], function(){
     Route::get('', 'Cms\LandController@index')->name('land');
     Route::get('/create', 'Cms\LandController@create')->name('land.create');
     Route::post('/create', 'Cms\LandController@store')->name('land.create');
-   
+    Route::get('/create/land-lot', 'Cms\LandController@createLandLot')->name('land.lot.create');
+    Route::post('/create/land-lot', 'Cms\LandController@storeLandLot')->name('land.lot.create');
+
     Route::get('/update/{id}', 'Cms\LandController@edit')->name('land.update');
     Route::post('/update/{id}', 'Cms\LandController@update')->name('land.update');
     Route::get('/destroy/{id}', 'Cms\LandController@destroy')->name('land.delete');
