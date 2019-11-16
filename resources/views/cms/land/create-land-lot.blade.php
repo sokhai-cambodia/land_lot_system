@@ -152,33 +152,33 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="g-width">Width</label>
-                                    <input type="number" class="form-control" minlength="0" step="0.01" name="g-width" id="g-width" placeholder="Land width" value="{{ UtilHelper::hasValue(old('g-width'), "") }}">
+                                    <input type="number" class="form-control" minlength="0" step="0.01" name="g-width" id="g-width" placeholder="Land width" value="{{ UtilHelper::hasValue(old('g-width'), 0) }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="g-height">Height</label>
-                                    <input type="number" class="form-control" minlength="0" step="0.01" name="g-height" id="g-height" placeholder="Land height" value="{{ UtilHelper::hasValue(old('g-height'), "") }}">
+                                    <input type="number" class="form-control" minlength="0" step="0.01" name="g-height" id="g-height" placeholder="Land height" value="{{ UtilHelper::hasValue(old('g-height'), 0) }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="g-size">Size</label>
-                                    <input type="number" class="form-control" minlength="0" step="0.01" name="g-size" id="g-size" placeholder="Land size" value="{{ UtilHelper::hasValue(old('g-size'), "") }}">
+                                    <input type="number" class="form-control" minlength="0" step="0.01" name="g-size" id="g-size" placeholder="Land size" value="{{ UtilHelper::hasValue(old('g-size'), 0) }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="g-price">Price</label>
-                                    <input type="number" minlength="0" step="0.01" class="form-control" name="g-price" id="g-price" placeholder="Enter price" value="{{ UtilHelper::hasValue(old('g-price'), "") }}">
+                                    <input type="number" minlength="0" step="0.01" class="form-control" name="g-price" id="g-price" placeholder="Enter price" value="{{ UtilHelper::hasValue(old('g-price'), 0) }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="g-commission">Commission (%)</label>
-                                    <input type="number" class="form-control" minlength="0" max="100" step="0.01" name="g-commission" id="g-commission" placeholder="Enter commission" value="{{ UtilHelper::hasValue(old('g-commission'), "") }}">
+                                    <input type="number" class="form-control" minlength="0" max="100" step="0.01" name="g-commission" id="g-commission" placeholder="Enter commission" value="{{ UtilHelper::hasValue(old('g-commission'), 0) }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="price">Generate Land Lot Qty</label>
-                                    <input type="number" minlength="0" class="form-control" name="qty" id="qty" placeholder="Enter Land lot qty" value="{{ UtilHelper::hasValue(old('qty'), "") }}">
+                                    <input type="number" minlength="0" class="form-control" name="qty" id="qty" placeholder="Enter Land lot qty" value="{{ UtilHelper::hasValue(old('qty'), 0) }}">
                                 </div>
                                 
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
-                                <button class="btn btn-primary nextBtn pull-right" type="button">Generate</button>
+                                <button class="btn btn-primary nextBtn pull-right" type="button" data-code="generate">Generate</button>
                             </div>
                         
                     </div>
@@ -196,7 +196,7 @@
                                         <th style="width: 5%">
                                             #
                                         </th>
-                                        <th style="width: 15%">
+                                        <th style="width: 20%">
                                             Title
                                         </th>
                                         <th style="width: 15%">
@@ -214,51 +214,10 @@
                                         <th style="width: 15%">
                                             Commission (%)
                                         </th>
-                                        <th style="width: 5%" class="text-center">
-                                            Action
-                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody id="tcontent">
-                                    <tr>
-                                        <td>
-                                            #
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" name="ll-title[]" id="ll-title" placeholder="title" />
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
-                                                <input type="number" class="form-control" minlength="0" step="0.01" name="ll-width" id="ll-width" placeholder="width">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
-                                                <input type="number" class="form-control" minlength="0" step="0.01" name="ll-height" id="ll-height" placeholder="height">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
-                                                <input type="number" class="form-control" minlength="0" step="0.01" name="ll-size" id="ll-size" placeholder="size">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
-                                                <input type="number" class="form-control" minlength="0" step="0.01" name="ll-price" id="ll-price" placeholder="price">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
-                                                <input type="number" class="form-control" minlength="0" maxlength="100" name="ll-commission" id="ll-commission" placeholder="commission">
-                                            </div>
-                                        </td>
-                                        <td class="project-actions text-right">
-                                           
-                                        </td>
-                                    </tr>
-                                    
+                                   
                                 </tbody>
                             </table>
                         </div>
@@ -283,6 +242,7 @@
 $(document).ready(function () {
 $('.dropify').dropify();
 
+
 var navListItems = $('div.setup-panel div a'),
     allWells = $('.setup-content'),
     allNextBtn = $('.nextBtn');
@@ -290,6 +250,7 @@ var navListItems = $('div.setup-panel div a'),
 allWells.hide();
 
 navListItems.click(function (e) {
+    
     e.preventDefault();
     var $target = $($(this).attr('href')),
         $item = $(this);
@@ -304,6 +265,10 @@ navListItems.click(function (e) {
 });
 
 allNextBtn.click(function () {
+    var code = $(this).attr('data-code');
+    if(code == "generate") {
+        if( generateLandLot() == false ) return false;
+    }
     var curStep = $(this).closest(".setup-content"),
         curStepBtn = curStep.attr("id"),
         nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
@@ -323,5 +288,60 @@ allNextBtn.click(function () {
 
 $('div.setup-panel div a.btn-success').trigger('click');
 });
+
+function generateLandLot() {
+
+    var width = $("#g-width").val();
+    var height = $("#g-height").val();
+    var size = $("#g-size").val();
+    var price = $("#g-price").val();
+    var commission = $("#g-commission").val();
+    var qty = $("#qty").val();
+    if(width == "" || height == "" || size == "" || price == "" || commission == "" || qty == "" ) {
+        alert("please input data");
+        return false;
+    }
+    var title = $("#title").val();
+    var table = "";
+    for(var i = 1; i <= qty; i++) {
+        table += `<tr>
+            <td>
+                ${i}
+            </td>
+            <td>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="ll-title[]" id="ll-title" placeholder="title" value="${title + " " + i}" />
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <input type="number" class="form-control" minlength="0" step="0.01" name="ll-width" id="ll-width" placeholder="width" value="${width}">
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <input type="number" class="form-control" minlength="0" step="0.01" name="ll-height" id="ll-height" placeholder="height" value="${height}">
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <input type="number" class="form-control" minlength="0" step="0.01" name="ll-size" id="ll-size" placeholder="size" value="${size}">
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <input type="number" class="form-control" minlength="0" step="0.01" name="ll-price" id="ll-price" placeholder="price" value="${price}">
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <input type="number" class="form-control" minlength="0" maxlength="100" name="ll-commission" id="ll-commission" placeholder="commission" value="${commission}">
+                </div>
+            </td>
+        </tr>`;
+    }
+    $("#tcontent").html(table);
+    return true;
+}
 </script>
 @endsection
