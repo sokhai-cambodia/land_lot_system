@@ -163,6 +163,18 @@ class LandController extends Controller
         try 
         {
             $land = Land::findOrFail($id);
+
+            //  Land has land lot not display
+            if(!($land->type == "land" && $land->is_split_land_lot = 1)) {
+                $request->validate([
+                    'price' => 'required|min:0',
+                    'commission' => 'required|min:0|max:100',
+                ]);
+                
+                $land->price = $request->price;
+                $land->commission = $request->commission;
+            }
+
             if($request->hasFile('image')) {
                 $land->image = FileHelper::updateImage($request->image, $land->image, '');
             }
@@ -172,8 +184,6 @@ class LandController extends Controller
             $land->size = $request->size;
             $land->width = $request->width;
             $land->height = $request->height;
-            $land->price = $request->price;
-            $land->commission = $request->commission;
             $land->location = $request->location;
             $land->status = $request->status;
             $land->updated_by = Auth::id();

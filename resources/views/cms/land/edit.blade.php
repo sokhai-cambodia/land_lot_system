@@ -34,14 +34,17 @@
                                 <label for="size">Size</label>
                                 <input type="number" class="form-control" minlength="0" step="0.01" name="size" id="size" placeholder="Enter size" value="{{ UtilHelper::hasValue(old('size'), $row->size) }}">
                             </div>
-                            <div class="form-group">
-                                <label for="price">Price</label>
-                                <input type="number" minlength="0" step="0.01" class="form-control" name="price" id="price" placeholder="Enter price" value="{{ UtilHelper::hasValue(old('price'), $row->price) }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="commission">Commission (%)</label>
-                                <input type="number" class="form-control" minlength="0" max="100" step="0.01" name="commission" id="commission" placeholder="Enter commission" value="{{ UtilHelper::hasValue(old('commission'), $row->commission) }}">
-                            </div>
+                            {{-- Land has land lot not display --}}
+                            @if(!($row->type == "land" && $row->is_split_land_lot = 1)) 
+                                <div class="form-group">
+                                    <label for="price">Price</label>
+                                    <input type="number" minlength="0" step="0.01" class="form-control" name="price" id="price" placeholder="Enter price" value="{{ UtilHelper::hasValue(old('price'), $row->price) }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="commission">Commission (%)</label>
+                                    <input type="number" class="form-control" minlength="0" max="100" step="0.01" name="commission" id="commission" placeholder="Enter commission" value="{{ UtilHelper::hasValue(old('commission'), $row->commission) }}">
+                                </div>
+                            @endif
                             <div class="form-group row">
                                 <label for="image">Image</label>
                                 <input type="file" name="image" class="form-control dropify" data-default-file="{{ $row->getPhoto() }}">
