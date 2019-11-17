@@ -12,7 +12,7 @@
         <!-- Sidebar user (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{ asset('cms/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+                <img src="{{ Auth::user()->getPhoto() }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
                 <a href="{{ route('profile.change-password') }}" class="d-block">{{ Auth::user()->last_name }} {{ Auth::user()->first_name }}</a>
@@ -88,9 +88,11 @@
                     </ul>
                 </li>
                 {{-- Land --}}
-                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['land', 'land.landlot'], true) }}">
+
+                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['land', 'land.create', 'land.lot.create'], true) }}">
+
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
+                        <i class="nav-icon fas fa-map-marked-alt"></i>
                         <p>
                             Land
                             <i class="fas fa-angle-left right"></i>
@@ -98,25 +100,30 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
+                            <a href="{{ UtilHelper::route('land.create') }}" class="nav-link {{ UtilHelper::activeSideBar(['land.create']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Create Land</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                                <a href="{{ UtilHelper::route('land.lot.create') }}" class="nav-link {{ UtilHelper::activeSideBar(['land.lot.create']) }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Create Land Lot</p>
+                                </a>
+                            </li>
+                        <li class="nav-item">
                             <a href="{{ UtilHelper::route('land') }}" class="nav-link {{ UtilHelper::activeSideBar(['land']) }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Land List</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ UtilHelper::route('land.landlot') }}" class="nav-link {{ UtilHelper::activeSideBar(['land.landlot']) }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>LandLot List</p>
-                            </a>
-                        </li>
-                       
                     </ul>
                 </li>
                 {{-- Revenue --}}
                 {{-- Land --}}
                 <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['revenue-cost'], true) }}">
                         <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-users"></i>
+                            <i class="nav-icon fas fa-money-check-alt"></i>
                             <p>
                                 Revenue Cose
                                 <i class="fas fa-angle-left right"></i>

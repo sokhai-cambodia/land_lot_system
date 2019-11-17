@@ -21,6 +21,11 @@ class DocumentUserController extends Controller
     {
 
         $user = User::find($userId);
+        if($user == null) {
+            NotificationHelper::setErrorNotification('Invalid User');
+            return redirect()->back();
+        }
+
         $data = [
             'title' => 'List Document User',
             'contentHeaders' => [
@@ -36,6 +41,11 @@ class DocumentUserController extends Controller
     public function create($userId)
     {
         $user = User::find($userId);
+        if($user == null) {
+            NotificationHelper::setErrorNotification('Invalid User');
+            return redirect()->back();
+        }
+
         $data = [
             'title' => 'Upload Document',
             'contentHeaders' => [
@@ -51,6 +61,10 @@ class DocumentUserController extends Controller
     public function store(Request $request, $userId) 
     {
         $user = User::find($userId);
+        if($user == null) {
+            NotificationHelper::setErrorNotification('Invalid User');
+            return redirect()->back();
+        }
         
         $request->validate([
             'files' => 'required|min:1',
@@ -127,6 +141,62 @@ class DocumentUserController extends Controller
 
     }
 
+    public function edit($userId, $id)
+    {
+        
+        $user = User::find($userId);
+        if($user == null) {
+            NotificationHelper::setErrorNotification('Invalid User');
+            return redirect()->back();
+        }
+
+        $doc = Document::find($id);
+        if($doc == null) {
+            NotificationHelper::setErrorNotification('Invalid Document');
+            return redirect()->back();
+        }
+
+        
+        $data = [
+            'title' => 'Upload Document',
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'Document User', 'route' => 'document.user', 'routeParam' => ['userId' => $user->id], 'class' => ''],
+                ['name' => 'Edit Document', 'route' => 'document.user.update', 'routeParam' => ['userId' => $user->id, 'id' => $id], 'class' => 'active']
+            ],
+            'userId' => $user->id,
+            'row' => $doc
+        ];
+        return view('cms.document.user.edit')->with($data);
+    }
+
+    public function update(Request $request, $userId, $id) 
+    {
+        
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+        ]);
+        
+        $user = User::find($userId);
+        if($user == null) {
+            NotificationHelper::setErrorNotification('Invalid User');
+            return redirect()->back();
+        }
+        
+        $doc = Document::find($id);
+        if($doc == null) {
+            NotificationHelper::setErrorNotification('Invalid Document');
+            return redirect()->back();
+        }
+        $doc->name = $request->name;
+        $doc->description = $request->description;
+        $doc->save();
+
+        NotificationHelper::setSuccessNotification('Update success');
+        return redirect()->route('document.user', ['userId' => $user->id]);
+    }
+
     
     // Ajax with datatable
     public function dataTable(Request $request, $userId)
@@ -134,6 +204,10 @@ class DocumentUserController extends Controller
        
 
         $user = User::find($userId);
+        if($user == null) {
+            NotificationHelper::setErrorNotification('Invalid User');
+            return redirect()->back();
+        }
         
         $draw = $request['draw'];
         $row = $request['start'];
@@ -163,6 +237,7 @@ class DocumentUserController extends Controller
         $records = Document::join('document_users', 'document_users.document_id', '=', 'documents.id')
                     ->whereRaw('1=1'.$searchQuery)
                     ->where('document_users.user_id', $user->id)
+                    ->select('documents.*')
                     ->orderBy('documents.'.$columnName, $columnSortOrder)
                     ->offset($row)
                     ->limit($rowPerPage)
@@ -172,7 +247,7 @@ class DocumentUserController extends Controller
 
         foreach($records as $record) {
             $extension = FileHelper::getFileIcon($record->extension);
-
+            $routeEdit = route('document.user.update', ['userId' => $user->id, 'id' => $record->id]);
             $data[] = [
                 "folder" => $record->folder,
                 "name" => $record->name,
@@ -180,7 +255,7 @@ class DocumentUserController extends Controller
                 "extension" => "<img src='$extension' alt='$record->extension' style='width: 30px; height: 30px'/>",
                 "size" => $record->size,
                 "action" => "<div class='btn-group'>
-                                <a href='#' class='btn btn-default btn-sm' title='Edit'><i class='far fa-edit'></i></a>
+                                <a href='$routeEdit' class='btn btn-default btn-sm' title='Edit'><i class='far fa-edit'></i></a>
                                 <button type='button' data-url='#' class='btn btn-default btn-sm btn-delete' title='Inactive'><i class='fas fa-toggle-on'></i></button>
                             </div>",
             ];

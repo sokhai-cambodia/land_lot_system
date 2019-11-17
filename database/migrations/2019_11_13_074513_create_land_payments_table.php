@@ -28,7 +28,8 @@ class CreateLandPaymentsTable extends Migration
             $table->integer('witness2_id')->nullable();
             $table->integer('witness3_id')->nullable();
             $table->double('price', 19, 2);
-            $table->double('deposit', 19, 2)->default(0);
+            $table->double('deposit', 19, 2)->default(0); // deposit money
+            $table->double('receive', 19, 2)->default(0); // money receive
             $table->double('discount', 19, 2)->default(0);
             $table->double('comission', 19, 2)->default(0);
             $table->enum('payment_type', ['installment_payment', 'completed_payment'])->default('installment_payment');

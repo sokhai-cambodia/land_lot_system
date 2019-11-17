@@ -15,7 +15,7 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form role="form" action="{{ route('land.create') }}" method="POST">
+                    <form role="form" action="{{ route('land.create') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="card-body">
                             <div class="form-group">
@@ -23,58 +23,36 @@
                                 <input type="name" class="form-control" name="title" id="title" placeholder="Enter title" value="{{ UtilHelper::hasValue(old('title'), "") }}">
                             </div>
                             <div class="form-group">
-                                <label for="size">Size</label>
-                                <input type="number" class="form-control" name="size" id="size" placeholder="Enter size" value="{{ UtilHelper::hasValue(old('size'), "") }}">
-                            </div>
-                            <div class="form-group">
                                 <label for="width">Width</label>
-                                <input type="number" class="form-control" name="width" id="width" placeholder="Enter width" value="{{ UtilHelper::hasValue(old('width'), "") }}">
+                                <input type="number" class="form-control" minlength="0" step="0.01" name="width" id="width" placeholder="Enter width" value="{{ UtilHelper::hasValue(old('width'), "") }}">
                             </div>
                             <div class="form-group">
                                 <label for="height">Height</label>
-                                <input type="number" class="form-control" name="height" id="height" placeholder="Enter height" value="{{ UtilHelper::hasValue(old('height'), "") }}">
+                                <input type="number" class="form-control" minlength="0" step="0.01" name="height" id="height" placeholder="Enter height" value="{{ UtilHelper::hasValue(old('height'), "") }}">
                             </div>
                             <div class="form-group">
-                                <label for="qty">Qty</label>
-                                <input type="number" class="form-control" name="qty" id="qty" placeholder="Enter qty" value="{{ UtilHelper::hasValue(old('qty'), "") }}">
+                                <label for="size">Size</label>
+                                <input type="number" class="form-control" minlength="0" step="0.01" name="size" id="size" placeholder="Enter size" value="{{ UtilHelper::hasValue(old('size'), "") }}">
                             </div>
                             <div class="form-group">
                                 <label for="price">Price</label>
-                                <input type="number" class="form-control" name="price" id="price" placeholder="Enter price" value="{{ UtilHelper::hasValue(old('price'), "") }}">
+                                <input type="number" minlength="0" step="0.01" class="form-control" name="price" id="price" placeholder="Enter price" value="{{ UtilHelper::hasValue(old('price'), "") }}">
                             </div>
                             <div class="form-group">
-                                <label for="commission">Commission</label>
-                                <input type="number" class="form-control" name="commission" id="commission" placeholder="Enter commission" value="{{ UtilHelper::hasValue(old('commission'), "") }}">
+                                <label for="commission">Commission (%)</label>
+                                <input type="number" class="form-control" minlength="0" max="100" step="0.01" name="commission" id="commission" placeholder="Enter commission" value="{{ UtilHelper::hasValue(old('commission'), "") }}">
                             </div>
+                            <div class="form-group row">
+                                    <label for="image">Image</label>
+                                    <input type="file" name="image" class="form-control dropify">
+                                </div>
                             <div class="form-group">
                                 <label for="description">Description</label>
                                 <textarea class="form-control" name="description" id="description" rows="5" placeholder="Enter description">{{ UtilHelper::hasValue(old('description'), "") }}</textarea>
                             </div>
-                            <div class="form-group row">
-                                <label for="image">Image</label>
-                                <input type="file" name="image" class="form-control dropify">
-                            </div>
                             <div class="form-group">
-                                <label for="status">Location</label>
-                                <select name="location" id="location" class="form-control">
-                                    @foreach ($location as $s)
-                                        @php 
-                                            $sSelected = UtilHelper::hasValue(old('location'), "");
-                                        @endphp
-                                        <option value="{{ $s }}" {{  UtilHelper::selected($s, $sSelected) }}>{{ $s }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="status">Type</label>
-                                <select name="type" id="type" class="form-control">
-                                    @foreach ($type as $s)
-                                        @php 
-                                            $sSelected = UtilHelper::hasValue(old('type'), "");
-                                        @endphp
-                                        <option value="{{ $s }}" {{  UtilHelper::selected($s, $sSelected) }}>{{ $s }}</option>
-                                    @endforeach
-                                </select>
+                                <label for="location">Location</label>
+                                <textarea class="form-control" name="location" id="location" rows="5" placeholder="Enter location">{{ UtilHelper::hasValue(old('location'), "") }}</textarea>
                             </div>
                             <div class="form-group">
                                 <label for="status">Status</label>
