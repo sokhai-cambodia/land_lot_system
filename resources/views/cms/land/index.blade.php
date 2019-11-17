@@ -15,46 +15,43 @@
             <form action="{{ route('land') }}" method="GET">
                 <div class="row">
                     <div class="col-sm-2">
-                        <input type="number" class="form-control" step="0.01" name="f_width" id="f_width" placeholder="From Width">
+                        <input type="number" class="form-control" step="0.01" name="f_width" id="f_width" placeholder="From Width" value="{{ $filter['f_width'] }}">
                     </div>
                     <div class="col-sm-2">
-                        <input type="number" class="form-control" step="0.01" name="t_width" id="t_width" placeholder="To Width">
+                        <input type="number" class="form-control" step="0.01" name="t_width" id="t_width" placeholder="To Width" value="{{ $filter['t_width'] }}">
                     </div>
                     <div class="col-sm-2">
-                        <input type="number" class="form-control" step="0.01" name="f_height" id="f_height" placeholder="From Height">
+                        <input type="number" class="form-control" step="0.01" name="f_height" id="f_height" placeholder="From Height" value="{{ $filter['f_height'] }}">
                     </div>
                     <div class="col-sm-2">
-                        <input type="number" class="form-control" step="0.01" name="t_height" id="t_height" placeholder="To Height">
+                        <input type="number" class="form-control" step="0.01" name="t_height" id="t_height" placeholder="To Height" value="{{ $filter['t_height'] }}">
                     </div>
                     <div class="col-sm-2">
-                        <input type="number" class="form-control" step="0.01" name="f_size" id="f_size" placeholder="From Size">
+                        <input type="number" class="form-control" step="0.01" name="f_size" id="f_size" placeholder="From Size" value="{{ $filter['f_size'] }}">
                     </div>
                     <div class="col-sm-2">
-                        <input type="number" class="form-control" step="0.01" name="t_size" id="t_size" placeholder="To Size">
+                        <input type="number" class="form-control" step="0.01" name="t_size" id="t_size" placeholder="To Size" value="{{ $filter['t_size'] }}">
                     </div>
                 </div>
             
                 <div class="row" style="margin-top: 10px">
                     <div class="col-sm-2">
-                        <input type="number" class="form-control" step="0.01" name="f_price" id="f_price" placeholder="From Price">
+                        <input type="number" class="form-control" step="0.01" name="f_price" id="f_price" placeholder="From Price" value="{{ $filter['f_price'] }}">
                     </div>
                     <div class="col-sm-2">
-                        <input type="number" class="form-control" step="0.01" name="t_price" id="t_price" placeholder="To Price">
+                        <input type="number" class="form-control" step="0.01" name="t_price" id="t_price" placeholder="To Price" value="{{ $filter['t_price'] }}">
                     </div>
                     <div class="col-sm-2">
-                        <input type="number" class="form-control" step="0.01" max="100" name="commission" id="commission" placeholder="Commission">
+                        <input type="number" class="form-control" step="0.01" max="100" name="commission" id="commission" placeholder="Commission" value="{{ $filter['commission'] }}">
                     </div>
                     <div class="col-sm-2">
-                        <input type="name" class="form-control" name="title" id="title" placeholder="Title">
+                        <input type="name" class="form-control" name="title" id="title" placeholder="Title" value="{{ $filter['title'] }}">
                     </div>
                     <div class="col-sm-1">
                         <select name="status" id="status" class="form-control">
                             <option value="">Status</option>
                             @foreach ($status as $s)
-                                @php 
-                                    $sSelected = UtilHelper::hasValue(old('status'), "");
-                                @endphp
-                                <option value="{{ $s }}" {{  UtilHelper::selected($s, $sSelected) }}>{{ $s }}</option>
+                                <option value="{{ $s }}" {{ $filter['f_status'] != "" ? UtilHelper::selected($s, $filter['f_status']) : "" }}>{{ $s }}</option>
                             @endforeach
                         </select>
                     </div>
