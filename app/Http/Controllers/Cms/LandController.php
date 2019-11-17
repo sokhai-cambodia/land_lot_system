@@ -372,7 +372,6 @@ class LandController extends Controller
             return redirect()->route('land');
         }
         // TODO: query by condition
-        $f_landType = isset($request->landType) ? $request->landType : "";
         $f_status = isset($request->status) ? $request->status : "";
         $f_width = isset($request->f_width) ? $request->f_width : "";
         $t_width = isset($request->t_width) ? $request->t_width : "";
