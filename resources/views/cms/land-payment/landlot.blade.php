@@ -1,3 +1,4 @@
+
 @extends('layouts.cms.template', compact('title'))
 
 @section('header')
@@ -12,7 +13,7 @@
     <!-- Default box -->
     <div class="card card-solid">
         <div class="card-header">
-            <form action="{{ route('land') }}" method="GET">
+            <form action="{{ route('land.landlot', ['id' => $id]) }}" method="GET">
                 <div class="row">
                     <div class="col-sm-2">
                         <input type="number" class="form-control" step="0.01" name="f_width" id="f_width" placeholder="From Width" value="{{ $filter['f_width'] }}">
@@ -47,19 +48,11 @@
                     <div class="col-sm-2">
                         <input type="name" class="form-control" name="title" id="title" placeholder="Title" value="{{ $filter['title'] }}">
                     </div>
-                    <div class="col-sm-1">
+                    <div class="col-sm-2">
                         <select name="status" id="status" class="form-control">
                             <option value="">Status</option>
                             @foreach ($status as $s)
                                 <option value="{{ $s }}" {{ $filter['f_status'] != "" ? UtilHelper::selected($s, $filter['f_status']) : "" }}>{{ $s }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-sm-1">
-                        <select name="landType" id="landType" class="form-control">
-                            <option value="">Type</option>
-                            @foreach ($landType as $s)
-                                <option value="{{ $s['key'] }}" {{ $filter['landType'] != "" ? UtilHelper::selected($s['key'], $filter['landType']) : "" }}>{{ $s['value'] }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -81,16 +74,12 @@
                             <div class="row">
                                 <div class="col-7">
                                     <p class="text-muted text-sm">
-                                        Type: {{ ucfirst($land->type) }} {{ $land->is_split_land_lot ? "(has land lot)" : "" }} <br>
                                         Width(m): {{ $land->width }} <br>
                                         Height(m): {{ $land->height }} <br>
                                         Size(m2): {{ $land->size }} <br>
-                                        @if($land->is_split_land_lot)
-                                            Avaible Land Lots: {{ $land->qty }} <br>
-                                        @else
-                                            Price($): {{ $land->price }} <br>
-                                            Commission(%): {{ $land->commission }} <br>
-                                        @endif
+                                        Price($): {{ $land->price }} <br>
+                                        Commission(%): {{ $land->commission }} <br>
+                                        Type: {{ ucfirst($land->type) }} <br>
                                         Status: {{ ucfirst($land->status) }}
                                     </p>
                                     <ul class="ml-4 mb-0 fa-ul text-muted">
@@ -105,28 +94,18 @@
                         </div>
                         <div class="card-footer">
                             <div class="text-right">
-                                @if(!$land->is_split_land_lot)
-                                    <a href="{{ route('land.payment.create', ['landId' => $land->id]) }}" class="btn btn-sm bg-teal">
-                                        Buy
-                                    </a>
-                                    <a href="#" class="btn btn-sm bg-teal">
-                                        Installment
-                                    </a>
-                                    <a href="{{ route('land.update', ['id' => $land->id])}}" class="btn btn-sm bg-teal">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-sm btn-primary">
-                                        <i class="fas fa-user"></i> View Info
-                                    </a>
-                                @else 
-                                    <a href="{{ route('land.update', ['id' => $land->id])}}" class="btn btn-sm bg-teal">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a href="{{ route('land.landlot', ['id' => $land->id])}}" class="btn btn-sm btn-primary">
-                                        <i class="fas fa-user"></i> View Land Lot
-                                    </a>
-                                @endif
-
+                                <a href="#" class="btn btn-sm bg-teal">
+                                    Buy
+                                </a>
+                                <a href="#" class="btn btn-sm bg-teal">
+                                    Installment
+                                </a>
+                                <a href="{{ route('land.update', ['id' => $land->id])}}" class="btn btn-sm bg-teal">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-user"></i> View Info
+                                </a>
                             </div>
                         </div>
                     </div>

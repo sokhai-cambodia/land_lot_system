@@ -1,41 +1,54 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Cms;
 
-use App\LandPayment;
+use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+use App\User;
+use App\Land;
+use NotificationHelper;
 
 class LandPaymentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
+    private $contentHeaders = ['name' => 'Dashboard', 'route' => 'cms', 'class' => ''];
+
     public function index()
     {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    // Create Payment 
+    public function create($landId)
     {
-        //
+        $land = Land::find($landId);
+        if($land == null) {
+            NotificationHelper::setWarningNotification('Invalid Land');
+            return redirect()->route('land');
+        }
+
+        $customers = User::where('role', 'customer')->get();
+        $witnesses = User::where('role', 'witness')->get();
+        $brokers = User::where('role', 'staff')->get();
+        $data = [
+            'title' => 'Create Payment',
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'Land', 'route' => 'land', 'class' => 'active']
+            ],
+            'customers' => $customers,
+            'witnesses' => $witnesses,
+            'brokers' => $brokers,
+            'land' => $land
+        ];
+        return view('cms.land-payment.create')->with($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    // Store payment
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**
