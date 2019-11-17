@@ -95,10 +95,10 @@
                         <div class="card-footer">
                             <div class="text-right">
                                 @if($land->status == "on_sale")
-                                    <a href="#" class="btn btn-sm bg-teal">
+                                    <a href="{{ route('land.payment.create', ['landId' => $land->id]) }}" class="btn btn-sm bg-teal">
                                         Buy
                                     </a>
-                                    <a href="#" class="btn btn-sm bg-teal">
+                                    <a href="{{ route('land.installment-payment.create', ['landId' => $land->id]) }}" class="btn btn-sm bg-teal">
                                         Installment
                                     </a>
                                 @endif

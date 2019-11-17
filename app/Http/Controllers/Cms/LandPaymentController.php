@@ -123,48 +123,41 @@ class LandPaymentController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\LandPayment  $landPayment
-     * @return \Illuminate\Http\Response
-     */
-    public function show(LandPayment $landPayment)
+
+    // Installment
+
+    // Create Payment 
+    public function createInstallment($landId)
     {
-        //
+        $land = Land::where('id', $landId)
+                    ->where('status', 'on_sale')
+                    ->first();
+        if($land == null) {
+            NotificationHelper::setWarningNotification('Invalid Land');
+            return redirect()->route('land');
+        }
+
+        $customers = User::where('role', 'customer')->get();
+        $witnesses = User::where('role', 'witness')->get();
+        $brokers = User::where('role', 'staff')->get();
+        $data = [
+            'title' => 'Create Installment Payment',
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'Land', 'route' => 'land', 'class' => 'active']
+            ],
+            'customers' => $customers,
+            'witnesses' => $witnesses,
+            'brokers' => $brokers,
+            'land' => $land,
+            'installmentType' => ['weekly', 'monthly']
+        ];
+        return view('cms.land-payment.create-installment')->with($data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\LandPayment  $landPayment
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(LandPayment $landPayment)
+    public function storeInstallment(Request $request, $landId) 
     {
-        //
+        dd('save installment: ', $request->all(), $landId);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\LandPayment  $landPayment
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, LandPayment $landPayment)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\LandPayment  $landPayment
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(LandPayment $landPayment)
-    {
-        //
-    }
+    
 }
