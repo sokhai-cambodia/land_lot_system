@@ -23,9 +23,54 @@ class LandController extends Controller
     {
         // TODO: query by condition
         $f_landType = isset($request->landType) ? $request->landType : "";
+        $f_status = isset($request->status) ? $request->status : "";
+        $f_width = isset($request->f_width) ? $request->f_width : "";
+        $t_width = isset($request->t_width) ? $request->t_width : "";
+        $f_height = isset($request->f_height) ? $request->f_height : "";
+        $t_height = isset($request->t_height) ? $request->t_height : "";
+        $f_size = isset($request->f_size) ? $request->f_size : "";
+        $t_size = isset($request->t_size) ? $request->t_size : "";
+        $f_price = isset($request->f_price) ? $request->f_price : "";
+        $t_price = isset($request->t_price) ? $request->t_price : "";
+        $commission = isset($request->commission) ? $request->commission : "";
+        $title = isset($request->title) ? $request->title : "";
+
         $whereData = [];
         if($f_landType != "") {
             $whereData[] = ['is_split_land_lot', $f_landType];
+        }
+        if($f_status != "") {
+            $whereData[] = ['status', $f_status];
+        }
+        if($f_width != "") {
+            $whereData[] = ['width', '>=', $f_width];
+        }
+        if($t_width != "") {
+            $whereData[] = ['width', '<=', $t_width];
+        }
+        if($f_height != "") {
+            $whereData[] = ['height', '>=', $f_height];
+        }
+        if($t_height != "") {
+            $whereData[] = ['height', '<=', $t_height];
+        }
+        if($f_size != "") {
+            $whereData[] = ['size', '>=', $f_size];
+        }
+        if($t_size != "") {
+            $whereData[] = ['size', '<=', $t_size];
+        }
+        if($f_price != "") {
+            $whereData[] = ['price', '>=', $f_price];
+        }
+        if($t_price != "") {
+            $whereData[] = ['price', '<=', $t_price];
+        }
+        if($commission != "") {
+            $whereData[] = ['commission', $commission];
+        }
+        if($title != "") {
+            $whereData[] = ['title', 'LIKE' , "%".$title."%"];
         }
         // query lands
         $lands = Land::where('type', 'land')
@@ -46,7 +91,19 @@ class LandController extends Controller
             'lands' => $lands,
             "landType" => $landTypes,
             'filter' => [
-                'landType' => $f_landType
+                'landType' => $f_landType,
+                'f_status' => $f_status,
+                'f_width' => $f_width,
+                't_width' => $t_width,
+                'f_height' => $f_height,
+                't_height' => $t_height,
+                'f_size' => $f_size,
+                't_size' => $t_size,
+                'f_price' => $f_price,
+                't_price' => $t_price,
+                'commission' => $commission,
+                'title' => $title,
+                
             ]
         ];
         return view('cms.land.index')->with($data);
@@ -163,6 +220,18 @@ class LandController extends Controller
         try 
         {
             $land = Land::findOrFail($id);
+
+            //  Land has land lot not display
+            if(!($land->type == "land" && $land->is_split_land_lot = 1)) {
+                $request->validate([
+                    'price' => 'required|min:0',
+                    'commission' => 'required|min:0|max:100',
+                ]);
+                
+                $land->price = $request->price;
+                $land->commission = $request->commission;
+            }
+
             if($request->hasFile('image')) {
                 $land->image = FileHelper::updateImage($request->image, $land->image, '');
             }
@@ -172,8 +241,6 @@ class LandController extends Controller
             $land->size = $request->size;
             $land->width = $request->width;
             $land->height = $request->height;
-            $land->price = $request->price;
-            $land->commission = $request->commission;
             $land->location = $request->location;
             $land->status = $request->status;
             $land->updated_by = Auth::id();
@@ -297,12 +364,64 @@ class LandController extends Controller
     }
     
     //Land lot List
-    public function landLot($id)
+    public function landLot(Request $request, $id)
     {
+        $land = Land::find($id);
+        if($land == null) {
+            NotificationHelper::setWarningNotification('Invalid Land');
+            return redirect()->route('land');
+        }
         // TODO: query by condition
+        $f_status = isset($request->status) ? $request->status : "";
+        $f_width = isset($request->f_width) ? $request->f_width : "";
+        $t_width = isset($request->t_width) ? $request->t_width : "";
+        $f_height = isset($request->f_height) ? $request->f_height : "";
+        $t_height = isset($request->t_height) ? $request->t_height : "";
+        $f_size = isset($request->f_size) ? $request->f_size : "";
+        $t_size = isset($request->t_size) ? $request->t_size : "";
+        $f_price = isset($request->f_price) ? $request->f_price : "";
+        $t_price = isset($request->t_price) ? $request->t_price : "";
+        $commission = isset($request->commission) ? $request->commission : "";
+        $title = isset($request->title) ? $request->title : "";
+
+        $whereData = [];
+        if($f_status != "") {
+            $whereData[] = ['status', $f_status];
+        }
+        if($f_width != "") {
+            $whereData[] = ['width', '>=', $f_width];
+        }
+        if($t_width != "") {
+            $whereData[] = ['width', '<=', $t_width];
+        }
+        if($f_height != "") {
+            $whereData[] = ['height', '>=', $f_height];
+        }
+        if($t_height != "") {
+            $whereData[] = ['height', '<=', $t_height];
+        }
+        if($f_size != "") {
+            $whereData[] = ['size', '>=', $f_size];
+        }
+        if($t_size != "") {
+            $whereData[] = ['size', '<=', $t_size];
+        }
+        if($f_price != "") {
+            $whereData[] = ['price', '>=', $f_price];
+        }
+        if($t_price != "") {
+            $whereData[] = ['price', '<=', $t_price];
+        }
+        if($commission != "") {
+            $whereData[] = ['commission', $commission];
+        }
+        if($title != "") {
+            $whereData[] = ['title', 'LIKE' , "%".$title."%"];
+        }
         // query land lots
         $lands = Land::where('type', 'land_lot')
                         ->where('land_id', $id)
+                        ->where($whereData)
                         ->orderBy('id', 'desc')
                         ->paginate(12);
         $data = [
@@ -313,7 +432,21 @@ class LandController extends Controller
             ],
             'status' => $this->status,
             'lands' => $lands,
-            'id' => $id
+            'id' => $id,
+            'filter' => [
+                'f_status' => $f_status,
+                'f_width' => $f_width,
+                't_width' => $t_width,
+                'f_height' => $f_height,
+                't_height' => $t_height,
+                'f_size' => $f_size,
+                't_size' => $t_size,
+                'f_price' => $f_price,
+                't_price' => $t_price,
+                'commission' => $commission,
+                'title' => $title,
+                
+            ]
         ];
         return view('cms.land.landlot')->with($data);
      }
