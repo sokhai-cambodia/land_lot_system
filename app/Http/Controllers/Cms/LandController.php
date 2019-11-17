@@ -222,7 +222,7 @@ class LandController extends Controller
             $land = Land::findOrFail($id);
 
             //  Land has land lot not display
-            if(!($land->type == "land" && $land->is_split_land_lot = 1)) {
+            if(!($land->type == "land" && $land->is_split_land_lot == 1)) {
                 $request->validate([
                     'price' => 'required|min:0',
                     'commission' => 'required|min:0|max:100',

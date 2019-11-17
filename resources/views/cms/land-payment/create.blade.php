@@ -52,7 +52,7 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form role="form" action="{{ route('land.create') }}" method="POST" enctype="multipart/form-data">
+                    <form role="form" action="{{ route('land.payment.create', ['landId' => $land->id]) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="card-body">
                             <!-- text input -->
@@ -121,33 +121,33 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="price">Price</label>
-                                        <input type="number" class="form-control" min="0" step="0.01" name="price" id="price" placeholder="Enter price" value="{{ UtilHelper::hasValue(old('price'), $land->price) }}">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="discount">Discount (%)</label>
-                                        <input type="number" class="form-control" min="0" max="100" step="0.01" name="discount" id="discount" placeholder="Enter discount" value="{{ UtilHelper::hasValue(old('discount'), "") }}">
-                                    </div>
-                                </div>
-                            </div>
+                            </div>     
                             <div class="form-group">
+                                <label for="price">Price</label>
+                                <input type="number" class="form-control" min="0" step="0.01" name="price" id="price" placeholder="Enter price" value="{{ UtilHelper::hasValue(old('price'), $land->price) }}">
+                            </div>
+                        
+                            <div class="form-group">
+                                <label for="discount">Discount (%)</label>
+                                <input type="number" class="form-control" min="0" max="100" step="0.01" name="discount" id="discount" placeholder="Enter discount" value="{{ UtilHelper::hasValue(old('discount'), 0) }}">
+                            </div>
+                        
+                            {{-- <div class="form-group">
                                 <label for="commission">Commission</label>
                                 <input type="number" class="form-control" min="0" step="0.01" name="commission" id="commission" placeholder="Enter commission" value="{{ UtilHelper::hasValue(old('commission'), "") }}">
-                            </div>
+                            </div> --}}
                             <div class="form-group">
-                                <label for="deposit">Deposit</label>
-                                <input type="number" class="form-control" min="0" step="0.01" name="deposit" id="deposit" placeholder="Enter deposit" value="{{ UtilHelper::hasValue(old('deposit'), "") }}">
+                                <label for="deposit">Sub Total</label>
+                                <input type="number" class="form-control" min="0" step="0.01" name="subtotal" id="subtotal" placeholder="Enter subtotal" value="{{ UtilHelper::hasValue(old('subtotal'), 0) }}" readonly>
                             </div>
                         
                             <div class="form-group">
                                 <label for="receive">Receive</label>
-                                <input type="number" class="form-control" min="0" max="100" step="0.01" name="receive" id="receive" placeholder="Enter receive" value="{{ UtilHelper::hasValue(old('receive'), "") }}">
+                                <input type="number" class="form-control" min="0" step="0.01" name="receive" id="receive" placeholder="Enter receive" value="{{ UtilHelper::hasValue(old('receive'), "") }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="deposit">Return</label>
+                                <input type="number" class="form-control" min="0" step="0.01" name="subtotal" id="subtotal" placeholder="Enter subtotal" value="{{ UtilHelper::hasValue(old('subtotal'), 0) }}" readonly>
                             </div>
                                 
                            

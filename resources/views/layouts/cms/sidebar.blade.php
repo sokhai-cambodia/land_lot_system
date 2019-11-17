@@ -88,13 +88,7 @@
                     </ul>
                 </li>
                 {{-- Land --}}
-<<<<<<< HEAD
-
-                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['land', 'land.create', 'land.lot.create'], true) }}">
-
-=======
                 <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['land', 'land.landlot', 'land.create', 'land.lot.create'], true) }}">
->>>>>>> d859059a17f1444d401bb32257510818abf82297
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-map-marked-alt"></i>
                         <p>

@@ -35,7 +35,7 @@
                                 <input type="number" class="form-control" minlength="0" step="0.01" name="size" id="size" placeholder="Enter size" value="{{ UtilHelper::hasValue(old('size'), $row->size) }}">
                             </div>
                             {{-- Land has land lot not display --}}
-                            @if(!($row->type == "land" && $row->is_split_land_lot = 1)) 
+                            @if(!($row->type == "land" && $row->is_split_land_lot == 1)) 
                                 <div class="form-group">
                                     <label for="price">Price</label>
                                     <input type="number" minlength="0" step="0.01" class="form-control" name="price" id="price" placeholder="Enter price" value="{{ UtilHelper::hasValue(old('price'), $row->price) }}">
