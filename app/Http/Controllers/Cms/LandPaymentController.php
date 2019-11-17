@@ -159,5 +159,34 @@ class LandPaymentController extends Controller
     {
         dd('save installment: ', $request->all(), $landId);
     }
+
+public function generateInstallment(Request $request)
+    {
+        $price = $request->price;
+        $duration = $request->duration;
+        $monthly_price = number_format($price / $duration, 2);
+        $installment_type = $request->installment_type == "weekly" ? "weeks" : "months";
+        
+        $start_date = date("Y-m-d", strtotime($request->start_date));
+        $end_date = date("Y-m-d", strtotime("+$duration $installment_type", strtotime($start_date)));
+        
+        $installmentData = [];
+        while($start_date < $end_date) {
+            $installmentData[] = [
+                "date" => date("Y-m-d", strtotime($start_date)),
+                "price" => $monthly_price
+            ];
+            $start_date = date("Y-m-d", strtotime("+1 $installment_type", strtotime($start_date)));
+        }
+
+        $data = view('cms.land-payment.generate-installment')
+                ->with(["data" => $installmentData])
+                ->render();
+
+        return response()->json([
+            'status' => 1,
+            'data' => $data
+        ]);
+    }
     
 }

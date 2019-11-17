@@ -287,7 +287,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tcontent">
-                                    <tr>
+                                    {{-- <tr>
                                         <td>1</td>
                                         <td>
                                             <input type="date" class="form-control" name="installment_date[]" id="installment_date" placeholder="Enter installment date">
@@ -295,7 +295,7 @@
                                         <td>
                                             <input type="number" minlength="0" class="form-control" name="installment_price[]" id="installment_price" placeholder="Enter installment price">
                                         </td>
-                                    </tr>
+                                    </tr> --}}
                                 </tbody>
                             </table>
                         </div>
@@ -344,9 +344,38 @@ navListItems.click(function (e) {
 
 allNextBtn.click(function () {
     var code = $(this).attr('data-code');
-    // if(code == "generate") {
-    //     alert("hello");
-    // }
+    if(code == "generate") {
+        var price = $("#price").val();
+        var discount = $("#discount").val();
+        var duration = $("#duration").val();
+        var installment_type = $("#installment_type").val();
+        var start_date = $("#start_date").val();
+
+        // var msg = `
+        //     price: ${price}
+        //     discount: ${discount}
+        //     duration: ${duration}
+        //     installment_type: ${installment_type}
+        //     start_date: ${start_date}
+        // `;
+        $.ajax({
+            type:'POST',
+            url:"{{ route('land.installment-payment.generate') }}",
+            data: {
+                _token: "{{ csrf_token() }}",
+                price: price,
+                discount: discount,
+                duration: duration,
+                installment_type: installment_type,
+                start_date: start_date
+            },
+            success:function(data) {
+                if(data.status == 1) {
+                    $('#tcontent').html(data.data);
+                }
+            }
+        }); 
+    }
     var curStep = $(this).closest(".setup-content"),
         curStepBtn = curStep.attr("id"),
         nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
