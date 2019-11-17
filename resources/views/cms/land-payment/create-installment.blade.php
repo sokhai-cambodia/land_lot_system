@@ -76,7 +76,7 @@
         <div class="row">
             <div class="col-md-12">
                 <!-- general form elements -->
-                <form role="form" action="{{ route('land.lot.create') }}" method="POST" enctype="multipart/form-data">
+                <form role="form" action="{{ route('land.installment-payment.create', ['landId' => $land->id]) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     {{-- Create Payment --}}
                     <div class="card card-primary setup-content" id="step-1">
@@ -347,6 +347,7 @@ allNextBtn.click(function () {
     if(code == "generate") {
         var price = $("#price").val();
         var discount = $("#discount").val();
+        var receive = $("#receive").val();
         var duration = $("#duration").val();
         var installment_type = $("#installment_type").val();
         var start_date = $("#start_date").val();
@@ -365,6 +366,7 @@ allNextBtn.click(function () {
                 _token: "{{ csrf_token() }}",
                 price: price,
                 discount: discount,
+                receive: receive,
                 duration: duration,
                 installment_type: installment_type,
                 start_date: start_date

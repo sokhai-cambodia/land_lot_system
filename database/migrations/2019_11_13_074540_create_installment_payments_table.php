@@ -23,7 +23,7 @@ class CreateInstallmentPaymentsTable extends Migration
             $table->integer('land_payment_id');
             $table->mediumText('note')->nullable();
             $table->date('installment_date'); //track schedule that customer should pay us
-            $table->dateTime('paid_date'); // date customer paid us
+            $table->dateTime('paid_date')->nullable(); // date customer paid us
             $table->integer('receiver_id')->nullable(); // track who receive money from customer
             $table->double('price', 19, 2);
             $table->enum('type', ['weekly', 'monthly', 'complete_paid'])->default('monthly'); // complete_paid use when you paid all money
