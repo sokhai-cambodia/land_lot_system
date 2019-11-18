@@ -329,6 +329,34 @@ class LandPaymentController extends Controller
         $data = array();
 
         foreach($records as $record) {
+            $actions = "<a class='dropdown-item' href='#'>View Invoice</a>";
+            $status = "";
+            if($record->payment_type == "completed_payment" && $record->status == "booked") {
+                $actions .= "<a class='dropdown-item' href='#'>Pay More</a>";
+                $status = "<span class='badge badge-warning'>Booked</span>";
+            } elseif( $record->payment_type == "installment_payment" && $record->status == "installment_process" ) {
+                $percent = $record->installment_process / $record->installment_total * 100;
+                $actions .= "<a class='dropdown-item' href='#'>View Installment</a>";
+                $status = "
+                    <div class='progress progress-sm'>
+                        <div class='progress-bar bg-green' role='progressbar' aria-volumenow='$percent' aria-volumemin='0' aria-volumemax='100' style='width: $percent%'>
+                        </div>
+                    </div>
+                    <small>$percent%</small>
+                ";
+            } elseif( $record->payment_type == "installment_payment" && $record->status == "installment_done" ) {
+                $actions .= "<a class='dropdown-item' href='#'>View Installment</a>";
+                $status = "
+                    <div class='progress progress-sm'>
+                        <div class='progress-bar bg-green' role='progressbar' aria-volumenow='100' aria-volumemin='0' aria-volumemax='100' style='width: 100%'>
+                        </div>
+                    </div>
+                    <small>100%</small> 
+                ";
+            } else {
+                $status = "<span class='badge badge-success'>Paid</span>";
+            }
+
             $data[] = [
                 "customer_id" => $record->customer,
                 "broker_id" => $record->broker,
@@ -338,10 +366,18 @@ class LandPaymentController extends Controller
                 "discount" => $record->discount,
                 "comission" => $record->comission,
                 "payment_type" => $record->payment_type,
-                "status" => $record->status,
-                "action" => "<div class='btn-group'>
-                                <button type='button' data-url='' class='btn btn-default btn-sm btn-delete' title='Inactive'><i class='fas fa-toggle-on'></i></button>
-                            </div>",
+                "status" => $status,
+                "action" => "
+                    <div class='btn-group'>
+                        <button type='button' class='btn btn-default btn-flat'>Action</button>
+                        <button type='button' class='btn btn-default btn-flat dropdown-toggle dropdown-icon' data-toggle='dropdown'>
+                            <span class='sr-only'>Toggle Dropdown</span>
+                            <div class='dropdown-menu' role='menu'>
+                                $actions
+                            </div>
+                        </button>
+                    </div>
+                ",
             ];
         }
 
