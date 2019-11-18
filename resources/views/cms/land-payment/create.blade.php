@@ -143,11 +143,11 @@
                         
                             <div class="form-group">
                                 <label for="receive">Receive</label>
-                                <input type="number" class="form-control" min="0" step="0.01" name="receive" id="receive" placeholder="Enter receive" value="{{ UtilHelper::hasValue(old('receive'), "") }}">
+                                <input type="number" class="form-control" min="0" step="0.01" name="receive" id="receive" placeholder="Enter receive" value="{{ UtilHelper::hasValue(old('receive'), 0) }}">
                             </div>
                             <div class="form-group">
                                 <label for="deposit">Return</label>
-                                <input type="number" class="form-control" min="0" step="0.01" name="subtotal" id="subtotal" placeholder="Enter subtotal" value="{{ UtilHelper::hasValue(old('subtotal'), 0) }}" readonly>
+                                <input type="number" class="form-control" step="0.01" name="return" id="return"  value="{{ UtilHelper::hasValue(old('return'), 0) }}" readonly>
                             </div>
                                 
                            
@@ -178,6 +178,32 @@
         $('.select2bs4').select2({
         theme: 'bootstrap4'
         })
+        
+        calculate();
+
+        $("#price").keyup(function(){
+            calculate();
+        });
+
+        $("#discount").keyup(function(){
+            calculate();
+        });
+
+        $("#receive").keyup(function(){
+            calculate();
+        });
+
+        function calculate() {
+            var price = $("#price").val();
+            var discount = $("#discount").val();
+            var receive = $("#receive").val();
+
+            var subtotal = price - (discount * price / 100);
+            var return_money = receive - subtotal;
+
+            $("#subtotal").val(subtotal);
+            $("#return").val(return_money);
+        }
     });
 </script>
 @endsection

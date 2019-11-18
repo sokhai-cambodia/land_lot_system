@@ -211,12 +211,12 @@
                             </div>
                         
                             <div class="form-group">
-                                <label for="receive">Receive</label>
-                                <input type="number" class="form-control" min="0" step="0.01" name="receive" id="receive" placeholder="Enter receive" value="{{ UtilHelper::hasValue(old('receive'), "") }}">
+                                <label for="receive">Deposit</label>
+                                <input type="number" class="form-control" min="0" step="0.01" name="deposit" id="deposit" placeholder="Enter deposit" value="{{ UtilHelper::hasValue(old('deposit'), 0) }}">
                             </div>
                             <div class="form-group">
-                                <label for="deposit">Return</label>
-                                <input type="number" class="form-control" min="0" step="0.01" name="subtotal" id="subtotal" placeholder="Enter subtotal" value="{{ UtilHelper::hasValue(old('subtotal'), 0) }}" readonly>
+                                <label for="installment">Installment</label>
+                                <input type="number" class="form-control" min="0" step="0.01" name="installment" id="installment" placeholder="Enter subtotal" value="{{ UtilHelper::hasValue(old('subtotal'), 0) }}" readonly>
                             </div>
                                 
                            
@@ -347,7 +347,7 @@ allNextBtn.click(function () {
     if(code == "generate") {
         var price = $("#price").val();
         var discount = $("#discount").val();
-        var receive = $("#receive").val();
+        var deposit = $("#deposit").val();
         var duration = $("#duration").val();
         var installment_type = $("#installment_type").val();
         var start_date = $("#start_date").val();
@@ -366,7 +366,7 @@ allNextBtn.click(function () {
                 _token: "{{ csrf_token() }}",
                 price: price,
                 discount: discount,
-                receive: receive,
+                deposit: deposit,
                 duration: duration,
                 installment_type: installment_type,
                 start_date: start_date
@@ -398,6 +398,31 @@ allNextBtn.click(function () {
 $('div.setup-panel div a.btn-success').trigger('click');
 });
 
+calculate();
+
+$("#price").keyup(function(){
+    calculate();
+});
+
+$("#discount").keyup(function(){
+    calculate();
+});
+
+$("#deposit").keyup(function(){
+    calculate();
+});
+
+function calculate() {
+    var price = $("#price").val();
+    var discount = $("#discount").val();
+    var deposit = $("#deposit").val();
+
+    var subtotal = price - (discount * price / 100);
+    var installment = deposit - subtotal;
+
+    $("#subtotal").val(subtotal);
+    $("#installment").val(installment);
+}
 
 </script>
 @endsection

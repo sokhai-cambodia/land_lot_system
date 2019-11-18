@@ -164,7 +164,7 @@ class LandPaymentController extends Controller
             'witness1' => 'required|min:0',
             'price' => 'required|min:0',
             'discount' => 'required|min:0|max:100',
-            'receive' => 'required|min:0|max:100',
+            'deposit' => 'required|min:0|max:100',
             'installment_type' => 'required',
             'duration' => 'required|min:1',
             'installment_date' => 'required',
@@ -188,8 +188,6 @@ class LandPaymentController extends Controller
                 
                 // calculate discount
                 $price_after_discount = $price - ($request->discount * $price / 100);
-                $deposit = $request->receive < $price_after_discount ? $request->receive : 0;
-                $receive = $request->receive >= $price_after_discount ? $price_after_discount : 0;
                 
                 // create land payment
                 $landPayment = LandPayment::create([
@@ -202,8 +200,8 @@ class LandPaymentController extends Controller
                     'witness2_id' => $request->witness2,
                     'witness3_id' => $request->witness3,
                     'price' => $price,
-                    'deposit' => $deposit,
-                    'receive' => $receive,
+                    'deposit' => $request->deposit,
+                    'receive' => 0,
                     'discount' => $request->discount,
                     'comission' => $commission,
                     'payment_type' => 'installment_payment',
@@ -251,7 +249,7 @@ class LandPaymentController extends Controller
     public function generateInstallment(Request $request)
     {
         $price = $request->price;
-        $price_after_discount = $price - ($request->discount * $price / 100) - $request->receive;
+        $price_after_discount = $price - ($request->discount * $price / 100) - $request->deposit;
         $duration = $request->duration;
         $monthly_price = number_format($price_after_discount / $duration, 2);
         $installment_type = $request->installment_type == "weekly" ? "weeks" : "months";
