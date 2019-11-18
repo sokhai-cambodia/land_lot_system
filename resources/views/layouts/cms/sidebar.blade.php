@@ -118,7 +118,7 @@
                     </ul>
                 </li>
                 {{-- Revenue --}}
-                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['land.payment'], true) }}">
+                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['land.payment', 'legal-service'], true) }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-file-invoice"></i>
                         <p>
@@ -131,6 +131,12 @@
                             <a href="{{ UtilHelper::route('land.payment') }}" class="nav-link {{ UtilHelper::activeSideBar(['land.payment']) }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Payment List</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('legal-service') }}" class="nav-link {{ UtilHelper::activeSideBar(['legal-service']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Legal Service</p>
                             </a>
                         </li>
                         
