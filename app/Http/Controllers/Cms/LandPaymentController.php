@@ -399,7 +399,8 @@ class LandPaymentController extends Controller
     public function installmentList($paymentId)
     {
         $installments = InstallmentPayment::where('land_payment_id', $paymentId)->get();
-        if($installments == null) {
+        
+        if($installments == null || count($installments) < 1) {
             NotificationHelper::setWarningNotification('Invalid Payment');
             return redirect()->route('land.payment');
         }
