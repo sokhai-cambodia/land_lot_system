@@ -52,8 +52,12 @@ Route::group(['prefix' => 'cms', 'middleware' => ['auth']], function(){
     // Land Payment
     require_once __DIR__.'/cms/land-payment.php';
 
+    // Legal Service
+    require_once __DIR__.'/cms/legal-service.php';
+
     // RevenueCost
     require_once __DIR__.'/cms/RevenueCost.php';
+
     // RevenueCostDetail
     require_once __DIR__.'/cms/RevenueCostDetail.php';
 

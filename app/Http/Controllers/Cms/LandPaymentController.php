@@ -297,11 +297,11 @@ class LandPaymentController extends Controller
         
         
         //  Search 
-        // $searchQuery = " ";
-        // if($searchValue != ''){
-        //     $searchQuery = " and (customer LIKE '%$searchValue%' OR broker LIKE '%$searchValue%') ";
-        // }
-        $searchQuery = " and (CONCAT(c.last_name, '', c.first_name) LIKE '%$searchValue%' OR CONCAT(b.last_name, '', b.first_name) LIKE '%$searchValue%') ";
+        $searchQuery = " ";
+        if($searchValue != ''){
+            $searchQuery = " and (CONCAT(c.last_name, '', c.first_name) LIKE '%$searchValue%' OR CONCAT(b.last_name, '', b.first_name) LIKE '%$searchValue%') ";
+        }
+        
 
         //  Total number of records without filtering
         //  $totalRecords = User::where('role', $role)->where('status', 'active')->count();
@@ -329,8 +329,12 @@ class LandPaymentController extends Controller
         $data = array();
 
         foreach($records as $record) {
-            $actions = "<a class='dropdown-item' href='#'>View Invoice</a>";
             $status = "";
+            $actions = "<a class='dropdown-item' href='#'>View Invoice</a>";
+
+            $routeLegalService = route('legal-service.create', ['paymentId' => $record->id]);
+            $actions .= "<a class='dropdown-item' href='$routeLegalService'>Legal Service</a>";
+            
             if($record->payment_type == "completed_payment" && $record->status == "booked") {
                 $actions .= "<a class='dropdown-item' href='#'>Pay More</a>";
                 $status = "<span class='badge badge-warning'>Booked</span>";
