@@ -454,12 +454,26 @@ class LandPaymentController extends Controller
             return redirect()->back();
         }
 
-        $installment->status = "paid";
-        $installment->receive = $request->receive;
-        $installment->receiver_id = Auth::id();
-        $installment->paid_date = date("Y-m-d H:i:s");
-        $installment->note = $request->note;
-        $installment->save();
+        DB::transaction(function () use($request, $installment) {
+            $paymentId = $installment->land_payment_id;
+
+            $installment->status = "paid";
+            $installment->receive = $request->receive;
+            $installment->receiver_id = Auth::id();
+            $installment->paid_date = date("Y-m-d H:i:s");
+            $installment->note = $request->note;
+            $installment->save();
+
+            // update land payment
+            $payment = LandPayment::find($paymentId);
+            if($payment->installment_process < $payment->installment_total - 1) {
+                $payment->installment_process = $payment->installment_process + 1;
+            } else {
+                $payment->installment_process = $payment->installment_process + 1;
+                $payment->status = 'installment_done';
+            }
+            $payment->save();
+        });
 
         NotificationHelper::setSuccessNotification('Installment paid successfully.');
         return redirect()->back();

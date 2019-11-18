@@ -240,7 +240,6 @@
                 },
                 success:function(data) {
                     if(data.status == 1) {
-                        console.log(data);
                         $("#d_installment_date").val(data.installment.installment_date);
                         $("#d_price").val(data.installment.price);
                         $("#d_paid_date").val(data.installment.paid_date);
