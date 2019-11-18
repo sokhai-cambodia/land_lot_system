@@ -23,7 +23,7 @@ class LandPaymentController extends Controller
             'title' => 'List Payment',
             'contentHeaders' => [
                 $this->contentHeaders,
-                ['name' => 'List Payment', 'route' => 'user.', 'class' => 'active']
+                ['name' => 'List Payment', 'route' => 'land.payment', 'class' => 'active']
             ],
             
         ];
@@ -335,8 +335,10 @@ class LandPaymentController extends Controller
                 $actions .= "<a class='dropdown-item' href='#'>Pay More</a>";
                 $status = "<span class='badge badge-warning'>Booked</span>";
             } elseif( $record->payment_type == "installment_payment" && $record->status == "installment_process" ) {
+                $routeInstallment = route('land.installment-payment', ['paymentId' => $record->id]);
+                $actions .= "<a class='dropdown-item' href='$routeInstallment'>View Installment</a>";
+                
                 $percent = $record->installment_process / $record->installment_total * 100;
-                $actions .= "<a class='dropdown-item' href='#'>View Installment</a>";
                 $status = "
                     <div class='progress progress-sm'>
                         <div class='progress-bar bg-green' role='progressbar' aria-volumenow='$percent' aria-volumemin='0' aria-volumemax='100' style='width: $percent%'>
@@ -345,7 +347,9 @@ class LandPaymentController extends Controller
                     <small>$percent%</small>
                 ";
             } elseif( $record->payment_type == "installment_payment" && $record->status == "installment_done" ) {
-                $actions .= "<a class='dropdown-item' href='#'>View Installment</a>";
+                $routeInstallment = route('land.installment-payment', ['paymentId' => $record->id]);
+                $actions .= "<a class='dropdown-item' href='$routeInstallment'>View Installment</a>";
+                
                 $status = "
                     <div class='progress progress-sm'>
                         <div class='progress-bar bg-green' role='progressbar' aria-volumenow='100' aria-volumemin='0' aria-volumemax='100' style='width: 100%'>
@@ -368,14 +372,13 @@ class LandPaymentController extends Controller
                 "payment_type" => $record->payment_type,
                 "status" => $status,
                 "action" => "
-                    <div class='btn-group'>
-                        <button type='button' class='btn btn-default btn-flat'>Action</button>
-                        <button type='button' class='btn btn-default btn-flat dropdown-toggle dropdown-icon' data-toggle='dropdown'>
-                            <span class='sr-only'>Toggle Dropdown</span>
-                            <div class='dropdown-menu' role='menu'>
-                                $actions
-                            </div>
+                    <div class='dropdown'>
+                        <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'>
+                        Action
                         </button>
+                        <div class='dropdown-menu'>
+                            $actions
+                        </div>
                     </div>
                 ",
             ];
@@ -391,6 +394,27 @@ class LandPaymentController extends Controller
         
         return response()->json($response);
 
+    }
+
+    public function installmentList($paymentId)
+    {
+        $installments = InstallmentPayment::where('land_payment_id', $paymentId)->get();
+        if($installments == null) {
+            NotificationHelper::setWarningNotification('Invalid Payment');
+            return redirect()->route('land.payment');
+        }
+
+        $data = [
+            'title' => 'Installment List',
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'List Payment', 'route' => 'land.payment', 'class' => ''],
+                ['name' => 'Installment', 'route' => '', 'class' => 'active']
+            ],
+            'installments' => $installments
+            
+        ];
+        return view('cms.land-payment.installment-list')->with($data);
     }
     
 }

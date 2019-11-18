@@ -27,7 +27,7 @@ class CreateInstallmentPaymentsTable extends Migration
             $table->integer('receiver_id')->nullable(); // track who receive money from customer
             $table->double('price', 19, 2);
             $table->enum('type', ['weekly', 'monthly', 'complete_paid'])->default('monthly'); // complete_paid use when you paid all money
-            $table->enum('staus', ['paid', 'unpaid'])->default('unpaid');
+            $table->enum('status', ['paid', 'unpaid'])->default('unpaid');
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();
             $table->integer('deleted_by')->nullable();
