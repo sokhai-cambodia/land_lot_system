@@ -19,7 +19,15 @@ class LandPaymentController extends Controller
 
     public function index()
     {
-        //
+        $data = [
+            'title' => 'List Payment',
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'List Payment', 'route' => 'user.', 'class' => 'active']
+            ],
+            
+        ];
+        return view('cms.land-payment.index')->with($data);
     }
 
     // Create Payment 
@@ -274,6 +282,79 @@ class LandPaymentController extends Controller
             'status' => 1,
             'data' => $data
         ]);
+    }
+
+    // Ajax with datatable
+    public function dataTable(Request $request)
+    {        
+        $draw = $request['draw'];
+        $row = $request['start'];
+        $rowPerPage = $request['length']; // Rows display per page
+        $columnIndex = $request['order'][0]['column']; // Column index
+        $columnName = $request['columns'][$columnIndex]['data']; // Column name
+        $columnSortOrder = $request['order'][0]['dir']; // asc or desc
+        $searchValue = $request['search']['value']; // Search value
+        
+        
+        //  Search 
+        // $searchQuery = " ";
+        // if($searchValue != ''){
+        //     $searchQuery = " and (customer LIKE '%$searchValue%' OR broker LIKE '%$searchValue%') ";
+        // }
+        $searchQuery = " and (CONCAT(c.last_name, '', c.first_name) LIKE '%$searchValue%' OR CONCAT(b.last_name, '', b.first_name) LIKE '%$searchValue%') ";
+
+        //  Total number of records without filtering
+        //  $totalRecords = User::where('role', $role)->where('status', 'active')->count();
+
+        //  Total number of record with filtering
+        $totalRecordwithFilter = LandPayment::join('users AS b', 'b.id', 'land_payments.broker_id')
+                                    ->join('users AS c', 'c.id', 'land_payments.customer_id')
+                                    ->whereRaw('1=1'.$searchQuery)
+                                    ->count();
+        
+        ## Fetch records
+        $records = LandPayment::join('users AS b', 'b.id', 'land_payments.broker_id')
+                    ->join('users AS c', 'c.id', 'land_payments.customer_id')
+                    ->select(
+                        'land_payments.*', 
+                        DB::raw("CONCAT(c.last_name, '', c.first_name) AS customer"),
+                        DB::raw("CONCAT(b.last_name, '', b.first_name) AS broker")
+                    )
+                    ->whereRaw('1=1'.$searchQuery)
+                    ->orderBy($columnName, $columnSortOrder)
+                    ->offset($row)
+                    ->limit($rowPerPage)
+                    ->get();
+
+        $data = array();
+
+        foreach($records as $record) {
+            $data[] = [
+                "customer_id" => $record->customer,
+                "broker_id" => $record->broker,
+                "price" => $record->price,
+                "deposit" => $record->deposit,
+                "receive" => $record->receive,
+                "discount" => $record->discount,
+                "comission" => $record->comission,
+                "payment_type" => $record->payment_type,
+                "status" => $record->status,
+                "action" => "<div class='btn-group'>
+                                <button type='button' data-url='' class='btn btn-default btn-sm btn-delete' title='Inactive'><i class='fas fa-toggle-on'></i></button>
+                            </div>",
+            ];
+        }
+
+        ## Response
+        $response = [
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecordwithFilter,
+            "iTotalDisplayRecords" => $totalRecordwithFilter,
+            "aaData" => $data
+        ];
+        
+        return response()->json($response);
+
     }
     
 }

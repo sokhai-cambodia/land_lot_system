@@ -118,25 +118,43 @@
                     </ul>
                 </li>
                 {{-- Revenue --}}
+                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['land.payment'], true) }}">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                            Payment & Service
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('land.payment') }}" class="nav-link {{ UtilHelper::activeSideBar(['land.payment']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Payment List</p>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </li>
                 {{-- Land --}}
                 <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['revenue-cost'], true) }}">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-money-check-alt"></i>
-                            <p>
-                                Revenue Cose
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="{{ UtilHelper::route('revenue-cost') }}" class="nav-link {{ UtilHelper::activeSideBar(['revenue-cost']) }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Revenue Cost List</p>
-                                </a>
-                            </li>
-                            
-                        </ul>
-                    </li>
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-money-check-alt"></i>
+                        <p>
+                            Revenue Cose
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('revenue-cost') }}" class="nav-link {{ UtilHelper::activeSideBar(['revenue-cost']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Revenue Cost List</p>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </li>
                 <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['define-your-route-name'], true) }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-copy"></i>
