@@ -398,12 +398,27 @@ class LandPaymentController extends Controller
 
     public function installmentList($paymentId)
     {
-        $installments = InstallmentPayment::where('land_payment_id', $paymentId)->get();
-        
-        if($installments == null || count($installments) < 1) {
+        $payment = LandPayment::find($paymentId);
+        if($payment == null || $payment->payment_type != 'installment_payment') {
             NotificationHelper::setWarningNotification('Invalid Payment');
             return redirect()->route('land.payment');
         }
+
+        $installments = InstallmentPayment::where('land_payment_id', $paymentId)
+                                            ->orderBy('installment_date', 'asc')
+                                            ->get();
+        
+        if($installments == null || count($installments) < 1) {
+            NotificationHelper::setWarningNotification('Installment has no data');
+            return redirect()->route('land.payment');
+        }
+
+        $land = Land::find($payment->land_id);
+        if($land == null) {
+            NotificationHelper::setWarningNotification('Invalid Land');
+            return redirect()->route('land.payment');
+        }
+
 
         $data = [
             'title' => 'Installment List',
@@ -412,10 +427,62 @@ class LandPaymentController extends Controller
                 ['name' => 'List Payment', 'route' => 'land.payment', 'class' => ''],
                 ['name' => 'Installment', 'route' => '', 'class' => 'active']
             ],
-            'installments' => $installments
-            
+            'installments' => $installments,
+            'land' => $land
         ];
         return view('cms.land-payment.installment-list')->with($data);
+    }
+
+    public function installmentPay(Request $request, $id) {
+        $request->validate([
+            'receive' => 'required|min:0',
+        ]);
+
+        $installment = InstallmentPayment::find($id);
+        if($installment == null) {
+            NotificationHelper::setWarningNotification('Invalid Id');
+            return redirect()->back();
+        }
+
+        if($installment->status == 'paid') {
+            NotificationHelper::setWarningNotification('Paid already');
+            return redirect()->back();
+        }
+
+        if($request->receive < $installment->price) {
+            NotificationHelper::setWarningNotification('Receive amount smaller than installment price');
+            return redirect()->back();
+        }
+
+        $installment->status = "paid";
+        $installment->receive = $request->receive;
+        $installment->receiver_id = Auth::id();
+        $installment->paid_date = date("Y-m-d H:i:s");
+        $installment->note = $request->note;
+        $installment->save();
+
+        NotificationHelper::setSuccessNotification('Installment paid successfully.');
+        return redirect()->back();
+    }
+
+    public function installmentDetail(Request $request) {
+        
+        $id = $request->id;
+        $installment = InstallmentPayment::find($id);
+        if($installment == null) {
+            return response()->json(['status' => 0]);
+        }
+
+        $user = User::find($installment->receiver_id);
+        if($user == null) {
+            return response()->json(['status' => 0]);
+        }
+
+        return response()->json([
+            'status' => 1,
+            'installment' => $installment,
+            'receiver' => $user->getFullName()
+        ]);
     }
     
 }

@@ -6,6 +6,8 @@ Route::group(['prefix' => 'land-payment'], function(){
     Route::post('/datatable', 'Cms\LandPaymentController@dataTable')->name('land.payment.data-table');
     
     Route::get('/installment/{paymentId}', 'Cms\LandPaymentController@installmentList')->name('land.installment-payment');
+    Route::post('/installment/detail', 'Cms\LandPaymentController@installmentDetail')->name('land.installment-payment.detail');
+    Route::post('/installment/pay/{id}', 'Cms\LandPaymentController@installmentPay')->name('land.installment-payment.pay');
 
     Route::get('/create/{landId}', 'Cms\LandPaymentController@create')->name('land.payment.create');
     Route::post('/create/{landId}', 'Cms\LandPaymentController@store')->name('land.payment.create');
