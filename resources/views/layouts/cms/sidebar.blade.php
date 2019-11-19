@@ -135,7 +135,7 @@
                     </ul>
                 </li>
                 {{-- Land --}}
-                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['revenue-cost'], true) }}">
+                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['revenue-cost.category', 'revenue-cost', 'revenue-cost.create.revenue', 'revenue-cost.create.cost'], true) }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-money-check-alt"></i>
                         <p>
@@ -145,9 +145,27 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
+                            <a href="{{ UtilHelper::route('revenue-cost.category') }}" class="nav-link {{ UtilHelper::activeSideBar(['revenue-cost.category']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Category</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ UtilHelper::route('revenue-cost') }}" class="nav-link {{ UtilHelper::activeSideBar(['revenue-cost']) }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Revenue Cost List</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('revenue-cost.create.revenue') }}" class="nav-link {{ UtilHelper::activeSideBar(['revenue-cost.create.revenue']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Create Revenue</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('revenue-cost.create.cost') }}" class="nav-link {{ UtilHelper::activeSideBar(['revenue-cost.create.cost']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Create Cost</p>
                             </a>
                         </li>
                         

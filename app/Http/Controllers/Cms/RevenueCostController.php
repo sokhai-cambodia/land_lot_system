@@ -8,24 +8,17 @@ use Illuminate\Http\Request;
 
 use Auth;
 use App\RevenueCost;
+use App\RevenueCostCategory;
 use NotificationHelper;
 
 
 class RevenueCostController extends Controller
 {
-   
     private $type = ['revenue', 'cost'];
     private $contentHeaders = ['name' => 'Dashboard', 'route' => 'cms', 'class' => ''];
 
-  
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
         $data = [
             'title' => 'List Revenue Cost',
             'contentHeaders' => [
@@ -33,137 +26,125 @@ class RevenueCostController extends Controller
                 ['name' => 'Revenue Cost', 'route' => 'revenue-cost', 'class' => 'active']
             ],
         ];
-        return view('cms.revenueCost.index')->with($data);
+        return view('cms.revenue-cost.index')->with($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    private function create($type)
     {
-        //
+        if(!in_array($type, $this->type)) {
+            NotificationHelper::setWarningNotification('Invalid Type');
+            return redirect()->back();
+        }
+
+        $categories = RevenueCostCategory::where('type', $type)->get();
         $data = [
-        
-            'title' => 'List Revenue Cost',
-            'type'=>$this->type,
+            'title' => 'Create '.ucfirst($type),
             'contentHeaders' => [
                 $this->contentHeaders,
-                ['name' => 'Revenue Cost', 'route' => 'revenue-cost', 'class' => 'active']
+                ['name' => 'Revenue Cost', 'route' => 'revenue-cost', 'class' => ''],
+                ['name' => 'Create', 'route' => '', 'class' => 'active']
             ],
+            'categories' => $categories,
+            'type' => $type
         ];
-        return view('cms.revenueCost.create')->with($data);
+        return view('cms.revenue-cost.create')->with($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function createRevenue() {
+        return $this->create('revenue');
+    }
+
+    public function createCost() {
+        return $this->create('cost');
+    }
+
+    public function store(Request $request, $type)
     {
-        //
         $request->validate([
-            'name' => 'required|max:255',
-            'code' => 'required|max:255',
+            'category' => 'required',
+            'date' => 'required',
+            'price' => 'required|min:0',
         ]);
+
+        if(!in_array($type, $this->type)) {
+            NotificationHelper::setWarningNotification('Invalid Type');
+            return redirect()->back();
+        }
 
         try 
         {     
-        
-            // Save Todo
             RevenueCost::create([
                 'company_id' => Auth::user()->company_id,
-                'name' => $request->name,
-                'code' => $request->code,
-                'type' => $request->type,
+                'category_id' => $request->category,
+                'date' => $request->date,
+                'price' => $request->price,
+                'note' => $request->note,
+                'type' => $type,
+                'reference_table' => 'default_code',
                 'created_by' => Auth::id()
             ]);
 
-            NotificationHelper::setSuccessNotification('Created Revenue Cost success');
-
+            NotificationHelper::setSuccessNotification('Created '.ucfirst($type).' success');
             return redirect()->route('revenue-cost');
-
            
         } 
         catch (\Exception $e) 
         {
+            dd($e);
             NotificationHelper::errorNotification($e);
             return back()->withInput();
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\RevenueCost  $revenueCost
-     * @return \Illuminate\Http\Response
-     */
-    public function show(RevenueCost $revenueCost)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\RevenueCost  $revenueCost
-     * @return \Illuminate\Http\Response
-     */
     public function edit(int $id)
     {
-        //
-        $row = RevenueCost::findOrFail($id);
+        $row = RevenueCost::find($id);
+        if($row == null) {
+            NotificationHelper::setWarningNotification('Invalid Id');
+            return redirect()->back();
+        }
+
+        $categories = RevenueCostCategory::where('type', $row->type)->get();
         $data = [
         
-            'title' => 'Edit Revenue Cost',
-            'type'=>$this->type,
-            'row'=>$row,
+            'title' => 'Edit '.ucfirst($row->type),
+            'row' => $row,
+            'categories' => $categories,
             'contentHeaders' => [
                 $this->contentHeaders,
-                ['name' => 'Edit Revenue Cost', 'route' => 'revenue-cost', 'class' => 'active']
+                ['name' => 'Revenue Cost', 'route' => 'revenue-cost', 'class' => ''],
+                ['name' => 'Edit', 'route' => '', 'class' => 'active']
             ],
         ];
-        return view('cms.revenueCost.edit')->with($data);
+        return view('cms.revenue-cost.edit')->with($data);
         
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\RevenueCost  $revenueCost
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, int $id)
     {
-        //
         $request->validate([
-            'name' => [
-            'required',
-            'max:255',
-                Rule::unique('revenue_cost_categories')->ignore($id),
-            ],
-            'code' =>'required|max:255',
-            
+            'category' => 'required',
+            'date' => 'required',
+            'price' => 'required|min:0',
         ]);
+
+        $revenueCode = RevenueCost::find($id);
+        if($revenueCode == null) {
+            NotificationHelper::setWarningNotification('Invalid Id');
+            return redirect()->back();
+        }
 
         try 
         {
            
-            $revenueCode= RevenueCost::findOrFail($id);
-            $revenueCode->company_id = Auth::user()->company_id;
-            $revenueCode->name=$request->name;
-            $revenueCode->code=$request->code;
-            $revenueCode->type=$request->type;
-            $revenueCode->created_by = Auth::id();
+            $revenueCode->category_id = $request->category;
+            $revenueCode->date = $request->date;
+            $revenueCode->price = $request->price;
+            $revenueCode->note = $request->note;
             $revenueCode->save();
+            
             NotificationHelper::setSuccessNotification('Updated Revenue Cost success');
             return redirect()->route('revenue-cost');
-
-           
         } 
         catch (\Exception $e) 
         {
@@ -173,30 +154,6 @@ class RevenueCostController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\RevenueCost  $revenueCost
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(int $id)
-    {
-        //
-        $revenue = RevenueCost::findOrFail($id);
-        try 
-        {
-            $revenue->deleted_at = date("Y-m-d H:i:s");
-            $revenue->deleted_by = Auth::id();
-            $revenue->save();
-            NotificationHelper::setDeletedPopUp('Deleted  Revenue Cost success');
-            return redirect()->route('revenue-cost');
-        } 
-        catch (\Exception $e) 
-        {
-            NotificationHelper::errorNotification($e);
-            return redirect()->route('revenue-cost');
-        }
-    }
     // Ajax with datatable
     public function dataTable(Request $request)
     {
@@ -215,15 +172,12 @@ class RevenueCostController extends Controller
             $searchQuery = " and (name like "."'%$searchValue%'".") ";
         }
 
-        //  Total number of records without filtering
-        $totalRecords = RevenueCost::count();
-
         //  Total number of record with filtering
         $totalRecordwithFilter = RevenueCost::whereRaw('1=1'.$searchQuery)->count();
         
         ## Fetch records
         $records = RevenueCost::whereRaw('1=1'.$searchQuery)
-                    ->orderBy($columnName, $columnSortOrder)
+                    // ->orderBy($columnName, $columnSortOrder)
                     ->offset($row)
                     ->limit($rowPerPage)
                     ->get();
@@ -232,18 +186,17 @@ class RevenueCostController extends Controller
 
         foreach($records as $record) {
             $routeEdit = route('revenue-cost.update', ['id' => $record->id]);
-            $routeDetail = route('revenue-cost-detail', ['revenueId' => $record->id]);
-            $routeDelete = route('revenue-cost.delete', ['id' => $record->id]);
+            // $routeDetail = route('revenue-cost-detail', ['revenueId' => $record->id]);
+            // $routeDelete = route('revenue-cost.delete', ['id' => $record->id]);
             $data[] = [
-                "name" => $record->name,
-                "code" => $record->code,
+                "category_id" => $record->category_id,
                 "type" => $record->type,
+                "date" => $record->date,
+                "price" => $record->price,
+                "note" => $record->note,
                 "action" => "<div class='btn-group'>
                                 <a href='$routeEdit' class='btn btn-default btn-sm'><i class='far fa-edit'></i></a>
-                                <button type='button' data-url='$routeDelete' class='btn btn-default btn-sm btn-delete'><i class='fas fa-trash-alt'></i></button>
-                                <a href='$routeDetail' class='btn btn-default btn-sm'><i class='far fa-eye'></i></a>
-
-                                </div>",
+                            </div>",
             ];
         }
 
@@ -251,7 +204,7 @@ class RevenueCostController extends Controller
         $response = [
             "draw" => intval($draw),
             "iTotalRecords" => $totalRecordwithFilter,
-            "iTotalDisplayRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordwithFilter,
             "aaData" => $data
         ];
         

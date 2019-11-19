@@ -29,6 +29,7 @@ class CreateRevenueCostsTable extends Migration
             $table->integer('reference_id')->nullable(); // null if reference_table = default_code 
             $table->integer('created_by');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
