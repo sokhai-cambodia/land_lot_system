@@ -41,7 +41,7 @@ class LegalServiceController extends Controller
         $legalService = LegalService::where('land_payment_id', $payment->id)->first();
         if($legalService != null) {
             // will redirect to legal service process list
-            return redirect()->route('legal-service');
+            return redirect()->route('legal-service.process', ['id' => $legalService->id]);
         }
 
         $land = Land::where('id', $payment->land_id)->first();
@@ -399,7 +399,7 @@ class LegalServiceController extends Controller
                     $legalService->updated_by = Auth::id();
                     $legalService->save();
                 }
-                
+
                 $process->status = 'done';
                 $process->updated_by = Auth::id();
                 $process->save();
