@@ -3,10 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use FileHelper;
+
 class Land extends Model
 {
-    //
+    use SoftDeletes;
+
     protected $table = 'lands';
     protected $guarded = [];
     //get show image

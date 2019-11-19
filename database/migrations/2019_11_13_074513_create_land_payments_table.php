@@ -40,6 +40,7 @@ class CreateLandPaymentsTable extends Migration
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
