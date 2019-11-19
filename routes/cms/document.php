@@ -16,5 +16,13 @@ Route::group(['prefix' => 'document'], function(){
     Route::get('/payment/update/{paymentId}/{id}', 'Cms\DocumentPaymentController@edit')->name('document.payment.update');
     Route::post('/payment/update/{paymentId}/{id}', 'Cms\DocumentPaymentController@update')->name('document.payment.update');
     Route::post('/payment/data-table/{paymentId}', 'Cms\DocumentPaymentController@dataTable')->name('document.payment.data-table');
+
+    // Service Process
+    Route::get('/process/{processId}', 'Cms\DocumentLegalServiceProcessController@index')->name('document.process');
+    Route::get('/process/create/{processId}', 'Cms\DocumentLegalServiceProcessController@create')->name('document.process.create');
+    Route::post('/process/create/{processId}', 'Cms\DocumentLegalServiceProcessController@store')->name('document.process.create');
+    Route::get('/process/update/{processId}/{id}', 'Cms\DocumentLegalServiceProcessController@edit')->name('document.process.update');
+    Route::post('/process/update/{processId}/{id}', 'Cms\DocumentLegalServiceProcessController@update')->name('document.process.update');
+    Route::post('/process/data-table/{processId}', 'Cms\DocumentLegalServiceProcessController@dataTable')->name('document.process.data-table');
 });
 

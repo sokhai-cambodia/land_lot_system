@@ -116,6 +116,8 @@
                                                     <div class="dropdown-menu">
                                                         <a class="dropdown-item" href="{{ route('legal-service.process.finish', ['id' => $d->legal_service_id, 'pid' => $d->id]) }}">Finished</a>
                                                         <a class="dropdown-item" href="{{ route('legal-service.process.update', ['id' => $d->legal_service_id, 'pid' => $d->id]) }}">Edit</a>
+                                                        <a class="dropdown-item" href="{{ route('document.process', ['processId' => $d->id]) }}">View Document</a>
+                                                        <a class="dropdown-item" href="{{ route('document.process.create', ['processId' => $d->id]) }}">Upload Document</a>
                                                     </div>
                                                 </div>
                                             </td>
