@@ -23,7 +23,7 @@ Route::post('/login', 'LoginController@login')->name('login');
 Route::get('/logout', 'LoginController@logout')->name('logout');
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('cms');
 });
 
 
@@ -37,8 +37,6 @@ Route::group(['prefix' => 'cms', 'middleware' => ['auth']], function(){
 
     // PROFILE
     require_once __DIR__.'/cms/profile.php';
-
-    require_once __DIR__.'/cms/todo.php';
 
     // Comapny
     require_once __DIR__.'/cms/company.php';
