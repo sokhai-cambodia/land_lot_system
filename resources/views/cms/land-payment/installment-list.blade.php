@@ -87,15 +87,25 @@
                                             <span class="badge {{ $ism->status == 'paid' ? 'badge-success' : 'badge-danger' }}">{{ ucfirst($ism->status) }}</span>
                                         </td>
                                         <td>
-                                            @if($ism->status == 'unpaid')
-                                                <button class="btn btn-info btn-sm btn-pay" data-url="{{ route('land.installment-payment.pay', ['id' => $ism->id]) }}" data-price="{{ $ism->price }}">
-                                                    Pay
+                                            @php 
+                                                $url = route('land.installment-payment.pay', ['id' => $ism->id]);
+                                                $action = "<button type='button' data-url='$url' data-price='$ism->price' class='dropdown-item btn-pay'>Pay</button>";
+                                                if($ism->status == 'paid'){
+                                                    $action = "<button type='button' data-id='$ism->id' class='dropdown-item btn-detail'>Detail</button>";
+                                                }
+                                            @endphp
+                                            
+
+                                            <div class='dropdown'>
+                                                <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'>
+                                                Action
                                                 </button>
-                                            @else
-                                                <button class="btn btn-success btn-sm btn-detail" data-id="{{ $ism->id }}">
-                                                    Detail
-                                                </button>
-                                            @endif
+                                                <div class='dropdown-menu'>
+                                                    {!! $action !!}
+                                                    <a href='#' class='dropdown-item' title='View Document'>View Document</a>
+                                                    <a href='#' class='dropdown-item' title='Upload Document'>Upload Document</a>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -319,6 +319,7 @@ class UserController extends Controller
             $routeEdit = route('user.update', ['role' => $role, 'id' => $record->id]);
             $routeToggle = route('user.toggle', ['role' => $role, 'id' => $record->id]);
             $routeDocument = route('document.user', ['userId' => $record->id]);
+            $routeUploadDocument = route('document.user.create', ['userId' => $record->id]);
             $data[] = [
                 "name" => $record->last_name.' '.$record->first_name,
                 "phone" => $record->phone,
@@ -335,6 +336,7 @@ class UserController extends Controller
                             <button type='button' data-url='$routeToggle' class='dropdown-item btn-delete'>Inactive</button>
                             <button type='button' data-id='$record->id' class='dropdown-item btn-view-detail' >View Detail</button>
                             <a href='$routeDocument' class='dropdown-item'>View Document</a>
+                            <a href='$routeUploadDocument' class='dropdown-item'>Upload Document</a>
                         </div>
                     </div>
                 ",

@@ -364,6 +364,8 @@ class LandPaymentController extends Controller
                 $status = "<span class='badge badge-success'>Paid</span>";
             }
 
+            $routeDocument = route('document.payment', ['paymentId' => $record->id]);
+            $routeCreateDocument = route('document.payment.create', ['paymentId' => $record->id]);
             $data[] = [
                 "customer_id" => $record->customer,
                 "broker_id" => $record->broker,
@@ -377,10 +379,12 @@ class LandPaymentController extends Controller
                 "action" => "
                     <div class='dropdown'>
                         <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'>
-                        Action
+                            Action
                         </button>
                         <div class='dropdown-menu'>
                             $actions
+                            <a class='dropdown-item' href='$routeDocument'>View Document</a>
+                            <a class='dropdown-item' href='$routeCreateDocument'>Upload Document</a>
                         </div>
                     </div>
                 ",
