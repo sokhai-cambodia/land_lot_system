@@ -102,8 +102,9 @@
                                                 </button>
                                                 <div class='dropdown-menu'>
                                                     {!! $action !!}
-                                                    <a href='#' class='dropdown-item' title='View Document'>View Document</a>
-                                                    <a href='#' class='dropdown-item' title='Upload Document'>Upload Document</a>
+                                                    <a class="dropdown-item" href="{{ route('document.installment', ['installmentId' => $ism->id]) }}">View Document</a>
+                                                    <a class="dropdown-item" href="{{ route('document.installment.create', ['installmentId' => $ism->id]) }}">Upload Document</a>
+                                                
                                                 </div>
                                             </div>
                                         </td>

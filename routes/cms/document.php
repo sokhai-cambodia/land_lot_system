@@ -24,5 +24,14 @@ Route::group(['prefix' => 'document'], function(){
     Route::get('/process/update/{processId}/{id}', 'Cms\DocumentLegalServiceProcessController@edit')->name('document.process.update');
     Route::post('/process/update/{processId}/{id}', 'Cms\DocumentLegalServiceProcessController@update')->name('document.process.update');
     Route::post('/process/data-table/{processId}', 'Cms\DocumentLegalServiceProcessController@dataTable')->name('document.process.data-table');
+
+    // Installment
+    Route::get('/installment/{installmentId}', 'Cms\DocumentInstallmentController@index')->name('document.installment');
+    Route::get('/installment/create/{installmentId}', 'Cms\DocumentInstallmentController@create')->name('document.installment.create');
+    Route::post('/installment/create/{installmentId}', 'Cms\DocumentInstallmentController@store')->name('document.installment.create');
+    Route::get('/installment/update/{installmentId}/{id}', 'Cms\DocumentInstallmentController@edit')->name('document.installment.update');
+    Route::post('/installment/update/{installmentId}/{id}', 'Cms\DocumentInstallmentController@update')->name('document.installment.update');
+    Route::post('/installment/data-table/{installmentId}', 'Cms\DocumentInstallmentController@dataTable')->name('document.installment.data-table');
+
 });
 
