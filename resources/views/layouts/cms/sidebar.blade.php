@@ -15,7 +15,7 @@
                 <img src="{{ Auth::user()->getPhoto() }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="{{ route('profile.change-password') }}" class="d-block">{{ Auth::user()->last_name }} {{ Auth::user()->first_name }}</a>
+                <a href="#" class="d-block">{{ Auth::user()->getFullName() }}</a>
             </div>
         </div>
         <!-- Sidebar Menu -->
@@ -170,7 +170,31 @@
                         </li>
                         
                     </ul>
-                </li>        
+                </li> 
+                {{-- User Setting --}}
+                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['profile.change-password'], true) }}">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-user-cog"></i>
+                        <p>
+                            User Setting
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('#') }}" class="nav-link {{ UtilHelper::activeSideBar(['#']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>My Account</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('profile.change-password') }}" class="nav-link {{ UtilHelper::activeSideBar(['profile.change-password']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Change Password</p>
+                            </a>
+                        </li>                    
+                    </ul>
+                </li> 
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
