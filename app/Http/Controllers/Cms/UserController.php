@@ -325,12 +325,19 @@ class UserController extends Controller
                 "national_id" => $record->national_id,
                 "passport_id" => $record->passport_id,
                 "status" => $record->status,
-                "action" => "<div class='btn-group'>
-                                <a href='$routeEdit' class='btn btn-default btn-sm' title='Edit'><i class='far fa-edit'></i></a>
-                                <button type='button' data-url='$routeToggle' class='btn btn-default btn-sm btn-delete' title='Inactive'><i class='fas fa-toggle-on'></i></button>
-                                <button type='button' data-id='$record->id' class='btn btn-default btn-sm btn-view-detail' title='Detail'><i class='fas fa-eye'></i></button>
-                                <a href='$routeDocument' class='btn btn-default btn-sm' title='Documents'><i class='far fa-folder'></i></a>
-                            </div>",
+                "action" => "
+                    <div class='dropdown'>
+                        <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'>
+                        Action
+                        </button>
+                        <div class='dropdown-menu'>
+                            <a href='$routeEdit' class='dropdown-item' title='Edit'>Edit</a>
+                            <button type='button' data-url='$routeToggle' class='dropdown-item btn-delete'>Inactive</button>
+                            <button type='button' data-id='$record->id' class='dropdown-item btn-view-detail' >View Detail</button>
+                            <a href='$routeDocument' class='dropdown-item'>View Document</a>
+                        </div>
+                    </div>
+                ",
             ];
         }
 
