@@ -53,6 +53,9 @@ Route::group(['prefix' => 'cms', 'middleware' => ['auth']], function(){
     // Legal Service
     require_once __DIR__.'/cms/legal-service.php';
 
+    // Revenue Cost Category
+    require_once __DIR__.'/cms/revenue-cost.php';
+
     // RevenueCost
     require_once __DIR__.'/cms/RevenueCost.php';
 

@@ -12,7 +12,7 @@ class RevenueCost extends Model
     
     use SoftDeletes;
     //
-    protected $table = 'revenue_cost_categories';
+    protected $table = 'revenue_costs';
     protected $guarded = [];
     //get show image
     public function getPhoto()

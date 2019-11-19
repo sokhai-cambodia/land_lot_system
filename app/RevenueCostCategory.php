@@ -10,6 +10,6 @@ use FileHelper;
 class RevenueCostCategory extends Model
 {
     //
-    protected $table = 'revenue_costs';
+    protected $table = 'revenue_cost_categories';
     protected $guarded = [];
 }
