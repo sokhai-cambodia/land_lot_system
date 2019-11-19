@@ -41,8 +41,9 @@
         <!-- Bootstrap 4 -->
         <script src="{{ asset('cms/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
         <!-- SweetAlert2 -->
-<script src="{{ asset('cms/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-
+        <script src="{{ asset('cms/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+        <!-- Select2 -->
+        <script src="{{ asset('cms/plugins/select2/js/select2.full.min.js') }}"></script>
         <!-- overlayScrollbars -->
         <script src="{{ asset('cms/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
         <!-- AdminLTE App -->

@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use App\LandPayment;
 use App\LegalService;
 use App\Land;
+use App\LegalServiceProcess;
+use App\User;
 use Auth;
 use NotificationHelper;
-
+use DB;
 
 class LegalServiceController extends Controller
 {
@@ -21,7 +23,7 @@ class LegalServiceController extends Controller
             'title' => 'List Legal Service',
             'contentHeaders' => [
                 $this->contentHeaders,
-                ['name' => 'List Legal Service', 'route' => '', 'class' => 'active']
+                ['name' => 'Legal Service', 'route' => '', 'class' => 'active']
             ],
             
         ];
@@ -182,8 +184,9 @@ class LegalServiceController extends Controller
         foreach($records as $record) {
             
             $routeEdit = route("legal-service.update", ["id" => $record->id]);
+            $routeProcess = route("legal-service.process", ["id" => $record->id]);
 
-            $actions = "<a class='dropdown-item' href='#'>Process List</a>";
+            $actions = "<a class='dropdown-item' href='$routeProcess'>Process List</a>";
             $actions .= "<a class='dropdown-item' href='$routeEdit'>Edit</a>";
 
             $data[] = [
@@ -214,6 +217,202 @@ class LegalServiceController extends Controller
         ];
         
         return response()->json($response);
+    }
+
+    // Process
+    public function process($id)
+    {
+        $legalService = LegalService::find($id);
+        if($legalService == null) {
+            NotificationHelper::setWarningNotification('Invalid Legal Service');
+            return redirect()->back();
+        }
+
+        $legalProcesses = LegalServiceProcess::where('legal_service_id', $id)
+                                            ->orderBy('id', 'desc')
+                                            ->get();
+
+        $data = [
+            'title' => 'List Legal Service',
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'Legal Service', 'route' => 'legal-service', 'class' => ''],
+                ['name' => 'Process', 'route' => '', 'class' => 'active']
+            ],
+            'data' => $legalProcesses,
+            'legalService' => $legalService
+        ];
+        return view('cms.legal-service.process')->with($data);
+    }
+
+    public function createProcess($id)
+    {
+        $legalService = LegalService::find($id);
+        if($legalService == null) {
+            NotificationHelper::setWarningNotification('Invalid Legal Service');
+            return redirect()->back();
+        }
+        
+        $users = User::where('role', 'staff')->get();
+
+        $data = [
+            'title' => 'Create Process',
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'Legal Service', 'route' => 'legal-service', 'class' => ''],
+                ['name' => 'Process', 'route' => 'legal-service.process', 'routeParam' => ['id' => $id], 'class' => 'active']
+            ],
+            'legalService' => $legalService,
+            'users' => $users
+        ];
+        return view('cms.legal-service.create-process')->with($data);
+    }
+
+    public function storeProcess(Request $request, $id) {
+        $request->validate([
+            'user' =>'required',
+            'start_date' => 'required',
+            'finished_date' => 'required',
+            'fee' => 'required',
+        ]);
+
+        $legalService = LegalService::find($id);
+        if($legalService == null) {
+            NotificationHelper::setWarningNotification('Invalid Legal Service');
+            return redirect()->back();
+        }
+
+        $is_continue = isset($request->is_continue);
+
+        LegalServiceProcess::create([
+            'legal_service_id' => $legalService->id,
+            'user_id' => $request->user,
+            'start_date' => $request->start_date,
+            'finished_date' => $request->finished_date,
+            'fee' => $request->fee,
+            'note' => $request->note,
+            'is_continue' => $is_continue,
+            'status' => 'on_process',
+            'created_by' => Auth::id(),
+        ]);
+        
+        NotificationHelper::setSuccessNotification('Create Legal Service Success.');
+        return redirect()->route('legal-service.process', ['id' => $id]);
 
     }
+
+    public function editProcess($id, $pid)
+    {
+        $legalService = LegalService::find($id);
+        if($legalService == null) {
+            NotificationHelper::setWarningNotification('Invalid Legal Service');
+            return redirect()->back();
+        }
+        
+        $process = LegalServiceProcess::where('id', $pid)
+                                        ->where('legal_service_id', $id)
+                                        ->first();
+
+        if($process == null) {
+            NotificationHelper::setWarningNotification('Invalid Process');
+            return redirect()->back();
+        }
+
+        $users = User::where('role', 'staff')->get();
+
+        $data = [
+            'title' => 'Edit Process',
+            'contentHeaders' => [
+                $this->contentHeaders,
+                ['name' => 'Legal Service', 'route' => 'legal-service', 'class' => ''],
+                ['name' => 'Process', 'route' => 'legal-service.process', 'routeParam' => ['id' => $id], 'class' => 'active']
+            ],
+            'legalService' => $legalService,
+            'process' => $process,
+            'users' => $users
+        ];
+        return view('cms.legal-service.edit-process')->with($data);
+    }
+
+    public function updateProcess(Request $request, $id, $pid) {
+        $request->validate([
+            'user' =>'required',
+            'start_date' => 'required',
+            'finished_date' => 'required',
+            'fee' => 'required',
+        ]);
+
+        $legalService = LegalService::find($id);
+        if($legalService == null) {
+            NotificationHelper::setWarningNotification('Invalid Legal Service');
+            return redirect()->back();
+        }
+
+        $process = LegalServiceProcess::where('id', $pid)
+                                        ->where('legal_service_id', $id)
+                                        ->first();
+        if($process == null) {
+            NotificationHelper::setWarningNotification('Invalid Process');
+            return redirect()->back();
+        }
+
+        $is_continue = isset($request->is_continue);
+
+        
+        $process->user_id = $request->user;
+        $process->start_date = $request->start_date;
+        $process->finished_date = $request->finished_date;
+        $process->fee = $request->fee;
+        $process->note = $request->note;
+        $process->is_continue = $is_continue;
+        $process->updated_by = Auth::id();
+        $process->save();
+        
+        NotificationHelper::setSuccessNotification('Create Legal Service Success.');
+        return redirect()->route('legal-service.process', ['id' => $id]);
+
+    }
+
+    public function finishProcess(Request $request, $id, $pid)
+    {
+        $legalService = LegalService::find($id);
+        if($legalService == null) {
+            NotificationHelper::setWarningNotification('Invalid Legal Service');
+            return redirect()->back();
+        }
+
+        $process = LegalServiceProcess::where('id', $pid)
+                                        ->where('legal_service_id', $id)
+                                        ->first();
+        if($process == null) {
+            NotificationHelper::setWarningNotification('Invalid Process');
+            return redirect()->back();
+        }
+
+        try
+        {
+            DB::transaction(function () use($request, &$process, &$legalService) {
+                //
+                if($process->is_continue == 0) {
+                    $legalService->status = 'completed';
+                    $legalService->process_percent = 100;
+                    $legalService->updated_by = Auth::id();
+                    $legalService->save();
+                }
+                
+                $process->status = 'done';
+                $process->updated_by = Auth::id();
+                $process->save();
+            });
+            NotificationHelper::setSuccessNotification('Process Success');
+            return redirect()->route('legal-service.process', ['id' => $id]);
+        }
+        catch (\Exception $e) 
+        {
+            NotificationHelper::errorNotification($e);
+            return back()->withInput();
+        }
+        
+    }
+
 }

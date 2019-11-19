@@ -4,6 +4,8 @@
 <link rel="stylesheet" href="{{ asset('cms/dist/css/ionicons.min.css') }}">
 <!-- SweetAlert2 -->
 <link rel="stylesheet" href="{{ asset('cms/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+<!-- iCheck for checkboxes and radio inputs -->
+<link rel="stylesheet" href="{{ asset('cms/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
 <!-- Select2 -->
 <link rel="stylesheet" href="{{ asset('cms/plugins/select2/css/select2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('cms/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">

@@ -168,8 +168,7 @@
 @endsection
 
 @section('footer')
-<!-- Select2 -->
-<script src="{{ asset('cms/plugins/select2/js/select2.full.min.js') }}"></script>
+
 <script>
     $(function () {
         //Initialize Select2 Elements

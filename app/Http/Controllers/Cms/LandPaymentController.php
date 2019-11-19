@@ -248,7 +248,6 @@ class LandPaymentController extends Controller
         }
         catch (\Exception $e) 
         {
-            dd($e);
             NotificationHelper::errorNotification($e);
             return back()->withInput();
         }
