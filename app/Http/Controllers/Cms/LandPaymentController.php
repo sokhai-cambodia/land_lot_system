@@ -128,7 +128,9 @@ class LandPaymentController extends Controller
                     'witness3_id' => $request->witness3,
                     'price' => $price,
                     'deposit' => $deposit,
+                    'deposit_at' => $deposit > 0 ? date("Y-m-d H:i:s") : null,
                     'receive' => $receive,
+                    'receive_at' => $receive > 0 ? date("Y-m-d H:i:s") : null,
                     'discount' => $request->discount,
                     'comission' => $commission,
                     'payment_type' => 'completed_payment',
@@ -200,33 +202,50 @@ class LandPaymentController extends Controller
 
         try
         {
-            DB::transaction(function () use($request, &$payment) {
-                $receive = $request->receive;
-                $remain_price = $payment->price - ($payment->discount * $payment->price / 100) - $payment->deposit;
-                
-                // Still booked
-                if($remain_price > $receive) {
-                    RevenueCost::createLandDeposit([
-                        'company_id' => Auth::user()->company_id,
-                        'date' => date("Y-m-d H:i:s"),
-                        'price' => $receive,
-                        'reference_id' => $payment->id,
-                        'created_by' => Auth::id()
-                    ]);
-                    
-                    $payment->deposit = $payment->deposit + $receive;
-                } else {
-                    RevenueCost::createLandPayment([
-                        'company_id' => Auth::user()->company_id,
-                        'date' => date("Y-m-d H:i:s"),
-                        'price' => $remain_price,
-                        'reference_id' => $payment->id,
-                        'created_by' => Auth::id()
-                    ]);
+            $receive = $request->receive;
+            $remain_price = $payment->price - ($payment->discount * $payment->price / 100) - $payment->deposit;
+            // dd($receive, $remain_price);
+            if($receive < $remain_price) {
+                NotificationHelper::setWarningNotification('Receive price smaller than remain price');
+                return redirect()->back();
+            }
 
-                    $payment->receive = $payment->receive + $remain_price;
-                    $payment->status = 'sold';
-                }
+            DB::transaction(function () use($remain_price, &$payment) {
+                
+
+                // Still booked
+                // if($remain_price > $receive) {
+                //     RevenueCost::createLandDeposit([
+                //         'company_id' => Auth::user()->company_id,
+                //         'date' => date("Y-m-d H:i:s"),
+                //         'price' => $receive,
+                //         'reference_id' => $payment->id,
+                //         'created_by' => Auth::id()
+                //     ]);
+                    
+                //     $payment->deposit = $payment->deposit + $receive;
+                // } else {
+                //     RevenueCost::createLandPayment([
+                //         'company_id' => Auth::user()->company_id,
+                //         'date' => date("Y-m-d H:i:s"),
+                //         'price' => $remain_price,
+                //         'reference_id' => $payment->id,
+                //         'created_by' => Auth::id()
+                //     ]);
+                //     $payment->receive = $payment->receive + $remain_price;
+                //     $payment->status = 'sold';
+                // }
+                RevenueCost::createLandPayment([
+                    'company_id' => Auth::user()->company_id,
+                    'date' => date("Y-m-d H:i:s"),
+                    'price' => $remain_price,
+                    'reference_id' => $payment->id,
+                    'created_by' => Auth::id()
+                ]);
+                
+                $payment->receive = $payment->receive + $remain_price;
+                $payment->receive_at = date("Y-m-d H:i:s");
+                $payment->status = 'sold';
                 $payment->save();
             });
 
@@ -318,6 +337,7 @@ class LandPaymentController extends Controller
                     'witness3_id' => $request->witness3,
                     'price' => $price,
                     'deposit' => $request->deposit,
+                    'deposit_at' => $request->deposit > 0 ? date("Y-m-d H:i:s") : null,
                     'receive' => 0,
                     'discount' => $request->discount,
                     'comission' => $commission,
