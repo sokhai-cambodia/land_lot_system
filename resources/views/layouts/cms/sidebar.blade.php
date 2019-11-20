@@ -139,7 +139,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-money-check-alt"></i>
                         <p>
-                            Revenue Cose
+                            Revenue Cost
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
@@ -169,6 +169,42 @@
                             </a>
                         </li>
                         
+                    </ul>
+                </li> 
+                {{-- Report --}}
+                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['report.daily', 'report.monthly', 'report.land-layout', 'report.sold-land'], true) }}">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-print"></i>
+                        <p>
+                            Report
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('report.daily') }}" class="nav-link {{ UtilHelper::activeSideBar(['report.daily']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Daily Report</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('report.monthly') }}" class="nav-link {{ UtilHelper::activeSideBar(['report.monthly']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Monthly Report</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('report.land-layout') }}" class="nav-link {{ UtilHelper::activeSideBar(['report.land-layout']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Land Layout</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ UtilHelper::route('report.sold-land') }}" class="nav-link {{ UtilHelper::activeSideBar(['report.sold-land']) }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Sold Land</p>
+                            </a>
+                        </li>
                     </ul>
                 </li> 
                 {{-- User Setting --}}
