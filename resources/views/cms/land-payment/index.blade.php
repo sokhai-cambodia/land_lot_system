@@ -52,7 +52,7 @@
     </div>
     <!-- /.card -->
     <!-- /.modal -->
-    {{-- Installment Pay Modal --}}
+    {{-- Pay Modal --}}
     <div class="modal fade" id="modal-pay">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
@@ -80,6 +80,16 @@
                         <button type="submit" class="btn btn-primary float-right">Pay</button>
                     </form>
                 </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+    </div>
+    {{-- View Invoice --}}
+    <div class="modal fade" id="modal-invoice">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content" id="modal-invoice-content">
+                <!-- Main content -->
+                <!-- /.invoice -->
             </div>
             <!-- /.modal-content -->
         </div>
@@ -122,6 +132,27 @@
             "columnDefs": [
                 { "orderable": false, "targets": 5 }
             ]
+        });
+
+        $("body").on("click", ".btn-view-invoice", function() {
+            var url = $(this).attr('data-url');
+
+            $.ajax({
+                type:'POST',
+                url: url,
+                data: {
+                    _token: "{{ csrf_token() }}",
+                },
+                success:function(data) {
+                    if(data.status == 1) {
+                        $('#modal-invoice-content').html(data.data);
+                        $('#modal-invoice').modal('toggle');
+                    } else {
+                        alert('error');
+                    }
+                }
+            }); 
+            
         });
 
         $("body").on("click", ".btn-pay", function() {

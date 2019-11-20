@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Cms;
 
+use App\Company;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
@@ -29,6 +30,29 @@ class LandPaymentController extends Controller
             
         ];
         return view('cms.land-payment.index')->with($data);
+    }
+
+    // view invoice modal 
+
+    public function viewInvoice($id)
+    {
+        $payment = LandPayment::find($id);
+        $company = Company::find($payment->company_id);
+        $customer = User::find($payment->customer_id);
+        $land = Land::find($payment->land_id);
+
+        $data = [
+            'payment' => $payment,
+            'company' => $company,
+            'customer' => $customer,
+            'land' => $land
+        ];
+        $content = view('cms.land-payment.view-invoice')->with($data)->render();
+
+        return response()->json([
+            'status' => 1,
+            'data' => $content
+        ]);
     }
 
     // Create Payment 
@@ -434,7 +458,8 @@ class LandPaymentController extends Controller
 
         foreach($records as $record) {
             $status = "";
-            $actions = "<a class='dropdown-item' href='#'>View Invoice</a>";
+            $urlViewInvoice = route('land.payment.view-invoice', ['id' => $record->id]);
+            $actions = "<button class='dropdown-item btn-view-invoice' data-url='$urlViewInvoice'>View Invoice</button>";
 
             $routeLegalService = route('legal-service.create', ['paymentId' => $record->id]);
             $actions .= "<a class='dropdown-item' href='$routeLegalService'>Legal Service</a>";
@@ -448,7 +473,7 @@ class LandPaymentController extends Controller
                 $routeInstallment = route('land.installment-payment', ['paymentId' => $record->id]);
                 $actions .= "<a class='dropdown-item' href='$routeInstallment'>View Installment</a>";
                 
-                $percent = $record->installment_process / $record->installment_total * 100;
+                $percent = number_format($record->installment_process / $record->installment_total * 100, 2);
                 $status = "
                     <div class='progress progress-sm'>
                         <div class='progress-bar bg-green' role='progressbar' aria-volumenow='$percent' aria-volumemin='0' aria-volumemax='100' style='width: $percent%'>
