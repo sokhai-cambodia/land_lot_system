@@ -68,7 +68,7 @@ class LandPaymentController extends Controller
             'witness1' => 'required|min:0',
             'price' => 'required|min:0',
             'discount' => 'required|min:0|max:100',
-            'receive' => 'required|min:0|max:100',
+            'receive' => 'required|min:0',
         ]);
         
         $land = Land::where('id', $landId)
@@ -156,7 +156,61 @@ class LandPaymentController extends Controller
         }
         catch (\Exception $e) 
         {
-            dd($e);
+            NotificationHelper::errorNotification($e);
+            return back()->withInput();
+        }
+
+    }
+
+    public function payMore(Request $request, $id)
+    {
+        $request->validate([
+            'receive' => 'required|min:0',
+        ]);
+
+        $payment = LandPayment::find($id);
+        if($payment == null) {
+            NotificationHelper::setWarningNotification('Invalid Payment');
+            return redirect()->back();
+        }
+
+        try
+        {
+            DB::transaction(function () use($request, &$payment) {
+                $receive = $request->receive;
+                $remain_price = $payment->price - ($payment->discount * $payment->price / 100) - $payment->deposit;
+                
+                // Still booked
+                if($remain_price > $receive) {
+                    RevenueCost::createLandDeposit([
+                        'company_id' => Auth::user()->company_id,
+                        'date' => date("Y-m-d H:i:s"),
+                        'price' => $receive,
+                        'reference_id' => $payment->id,
+                        'created_by' => Auth::id()
+                    ]);
+                    
+                    $payment->deposit = $payment->deposit + $receive;
+                } else {
+                    RevenueCost::createLandPayment([
+                        'company_id' => Auth::user()->company_id,
+                        'date' => date("Y-m-d H:i:s"),
+                        'price' => $remain_price,
+                        'reference_id' => $payment->id,
+                        'created_by' => Auth::id()
+                    ]);
+
+                    $payment->receive = $payment->receive + $remain_price;
+                    $payment->status = 'sold';
+                }
+                $payment->save();
+            });
+
+            NotificationHelper::setSuccessNotification('Success Payment');
+            return redirect()->back();
+        }
+        catch (\Exception $e) 
+        {
             NotificationHelper::errorNotification($e);
             return back()->withInput();
         }
@@ -226,10 +280,10 @@ class LandPaymentController extends Controller
                 $commission = $land->commission * $price / 100;
                 
                 // calculate discount
-                $price_after_discount = $price - ($request->discount * $price / 100);
+                // $price_after_discount = $price - ($request->discount * $price / 100);
                 
                 // create land payment
-                $landPayment = LandPayment::create([
+                $payment = $landPayment = LandPayment::create([
                     'company_id' => Auth::id(),
                     'land_id' => $land->id,
                     'saler_id' => Auth::id(),
@@ -251,6 +305,27 @@ class LandPaymentController extends Controller
                     'created_by' => Auth::id()
                 ]);
                 
+                if($request->deposit > 0) {
+                    RevenueCost::createLandDeposit([
+                        'company_id' => Auth::user()->company_id,
+                        'date' => date("Y-m-d H:i:s"),
+                        'price' => $payment->deposit,
+                        'reference_id' => $payment->id,
+                        'created_by' => Auth::id()
+                    ]);
+                }
+
+                if($commission > 0) {
+                    RevenueCost::createLandCommission([
+                        'company_id' => Auth::user()->company_id,
+                        'date' => date("Y-m-d H:i:s"),
+                        'price' => $commission,
+                        'reference_id' => $payment->id,
+                        'created_by' => Auth::id()
+                    ]);
+                }
+                
+
                 // update land status
                 $land->status = 'sold';
                 $land->save();
@@ -271,8 +346,7 @@ class LandPaymentController extends Controller
                 }
                 InstallmentPayment::insert($installments);
 
-                // Save to RevenueCost
-                // $landPayment
+                
             });
             NotificationHelper::setSuccessNotification('Payment Success');
             return redirect()->route('land');
@@ -366,7 +440,9 @@ class LandPaymentController extends Controller
             $actions .= "<a class='dropdown-item' href='$routeLegalService'>Legal Service</a>";
             
             if($record->payment_type == "completed_payment" && $record->status == "booked") {
-                $actions .= "<a class='dropdown-item' href='#'>Pay More</a>";
+                $price_after_discount = $record->price - ($record->discount * $record->price / 100) - $record->deposit;
+                $url = route('land.payment.pay-more', ['id' => $record->id]);
+                $actions .= "<button class='dropdown-item btn-pay' data-url='$url' data-price='$price_after_discount'>Pay More</button>";
                 $status = "<span class='badge badge-warning'>Booked</span>";
             } elseif( $record->payment_type == "installment_payment" && $record->status == "installment_process" ) {
                 $routeInstallment = route('land.installment-payment', ['paymentId' => $record->id]);

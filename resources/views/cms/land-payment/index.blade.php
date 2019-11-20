@@ -52,12 +52,37 @@
     </div>
     <!-- /.card -->
     <!-- /.modal -->
-    <div class="modal fade" id="view-info">
-        <div class="modal-dialog modal-lg" id="view-content">
-            
+    {{-- Installment Pay Modal --}}
+    <div class="modal fade" id="modal-pay">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Payment Form</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="form" role="form" action="" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <label for="price">Price</label>
+                            <input type="number" class="form-control" min="0" step="0.01" name="price" id="price" placeholder="Enter price" value="" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="receive">Receive</label>
+                            <input type="number" class="form-control" min="0" step="0.01" name="receive" id="receive" placeholder="Enter receive" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="return">Return</label>
+                            <input type="number" class="form-control" step="0.01" name="return" id="return" placeholder="Enter return" value="0" readonly>
+                        </div>
+                        <button type="submit" class="btn btn-primary float-right">Pay</button>
+                    </form>
+                </div>
+            </div>
             <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
 </section>
@@ -99,29 +124,29 @@
             ]
         });
 
-        // open modal
-        $("body").on('click', '.btn-view-detail', function(){
-            var id = $(this).attr('data-id');
-            $.ajax({
-                url: "{{ route('user.detail') }}",
-                method: 'post',
-                dataType : 'json',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    "id": id,
-                },
-                success: function(result){
-                    if(result.status == 1) {
-                        $("#view-content").html(result.modal);
-                        $('#view-info').modal('toggle');
-                    } else {
-                        alert('no data');
-                    }
-                    
-                    
-                }
-            })
+        $("body").on("click", ".btn-pay", function() {
+            var url = $(this).attr('data-url');
+            var price = $(this).attr('data-price');
+            $("#form").attr('action', url);
+            $("#price").val(price);
+
+            calculate();
+            $('#modal-pay').modal('toggle');
         });
+
+        $("#receive").keyup(function(){
+            calculate();
+        });
+
+        function calculate() {
+            var price = $("#price").val();
+            var receive = $("#receive").val();
+            var return_money = receive - price;
+
+            $("#return").val(return_money);
+        }
+
+        
     });
 </script>
 @include('layouts.message.delete-confirm')
