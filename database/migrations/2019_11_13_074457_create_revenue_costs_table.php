@@ -25,7 +25,7 @@ class CreateRevenueCostsTable extends Migration
             $table->double('price', 19, 2); 
             $table->mediumText('note')->nullable();
             $table->enum('type', ['revenue', 'cost']);
-            $table->enum('reference_table', ['default_code', 'land_payment', 'installment_payment', 'legal_service_process']);
+            $table->enum('reference_table', ['default_code', 'land_payments', 'installment_payments', 'legal_service_processes'])->default('default_code');
             $table->integer('reference_id')->nullable(); // null if reference_table = default_code 
             $table->integer('created_by');
             $table->timestamps();

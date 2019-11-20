@@ -60,7 +60,7 @@
                 },
             },
             'columns': [
-                { data: 'category_id' },
+                { data: 'name' },
                 { data: 'type' },
                 { data: 'date' },
                 { data: 'price' },

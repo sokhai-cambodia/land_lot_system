@@ -8,6 +8,7 @@ use App\User;
 use App\Land;
 use App\LandPayment;
 use App\InstallmentPayment;
+use App\RevenueCost;
 use NotificationHelper;
 use DB;
 use Auth;
@@ -118,7 +119,37 @@ class LandPaymentController extends Controller
                 $land->status = $status;
                 $land->save();
                 // Save to RevenueCost
-                // $landPayment
+                RevenueCost::createLandCommission([
+                    'company_id' => Auth::user()->company_id,
+                    'date' => date("Y-m-d H:i:s"),
+                    'price' => $commission,
+                    'reference_id' => $landPayment->id,
+                    'created_by' => Auth::id()
+                ]);
+                
+                // Save Deposit or Payment
+                
+                if($deposit > 0) {
+                    RevenueCost::createLandDeposit([
+                        'company_id' => Auth::user()->company_id,
+                        'date' => date("Y-m-d H:i:s"),
+                        'price' => $deposit,
+                        'reference_id' => $landPayment->id,
+                        'created_by' => Auth::id()
+                    ]);
+                }  
+
+                if($receive > 0) {
+                    RevenueCost::createLandPayment([
+                        'company_id' => Auth::user()->company_id,
+                        'date' => date("Y-m-d H:i:s"),
+                        'price' => $receive,
+                        'reference_id' => $landPayment->id,
+                        'created_by' => Auth::id()
+                    ]);
+                }
+            
+                
             });
             NotificationHelper::setSuccessNotification('Payment Success');
             return redirect()->route('land');
@@ -462,12 +493,21 @@ class LandPaymentController extends Controller
         }
 
         DB::transaction(function () use($request, $installment) {
+            $date = date("Y-m-d H:i:s");
+            RevenueCost::createInstallmentPayment([
+                'company_id' => Auth::user()->company_id,
+                'date' => $date,
+                'price' => $installment->price,
+                'reference_id' => $installment->id,
+                'created_by' => Auth::id()
+            ]);
+
             $paymentId = $installment->land_payment_id;
 
             $installment->status = "paid";
             $installment->receive = $request->receive;
             $installment->receiver_id = Auth::id();
-            $installment->paid_date = date("Y-m-d H:i:s");
+            $installment->paid_date = $date;
             $installment->note = $request->note;
             $installment->save();
 

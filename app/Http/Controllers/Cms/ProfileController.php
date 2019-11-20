@@ -15,7 +15,6 @@ use FileHelper;
 
 class ProfileController extends Controller
 {   
-    private $icon = 'icon-layers';
     private $gender = ['male', 'female'];
     private $contentHeaders = ['name' => 'Dashboard', 'route' => 'cms', 'class' => ''];
 
@@ -40,33 +39,30 @@ class ProfileController extends Controller
             'first_name' => 'required|max:255',
             'gender' => [
                 'required',
-                Rule::in(['male', 'female']),
+                Rule::in($this->gender),
             ],
             'dob' => 'required|date',
-            'username' =>  [
-                'required',
-                'max:255',
-                Rule::unique('users')->ignore(Auth::id()),
-            ],
         ]);
 
         try 
         {
             $user = User::findOrFail(Auth::id());
-            if($request->hasFile('photo')) {
-                $user->photo = FileHelper::updateImage($request->photo, $user->photo, '');
+
+            if($request->hasFile('image')) {
+                $user->image = FileHelper::updateImage($request->image, $user->image, '');
             }
-            
+        
             $user->last_name = $request->last_name;
             $user->first_name = $request->first_name;
+            $user->phone = $request->phone;
+            $user->national_id = $request->national_id;
+            $user->passport_id = $request->passport_id;
             $user->gender = $request->gender;
             $user->dob = $request->dob;
-            $user->phone = $request->phone;
-            $user->username = $request->username;
             $user->updated_by = Auth::id();
             $user->save();
 
-            NotificationHelper::setSuccessNotification('updated_success');
+            NotificationHelper::setSuccessNotification('updated success');
             return redirect()->route('profile.update');
         } 
         catch (\Exception $e) 

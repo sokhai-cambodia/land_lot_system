@@ -169,15 +169,19 @@ class RevenueCostController extends Controller
         //  Search 
         $searchQuery = " ";
         if($searchValue != ''){
-            $searchQuery = " and (name like "."'%$searchValue%'".") ";
+            $searchQuery = " and (revenue_costs.price like "."'%$searchValue%'".") ";
         }
 
         //  Total number of record with filtering
-        $totalRecordwithFilter = RevenueCost::whereRaw('1=1'.$searchQuery)->count();
+        $totalRecordwithFilter = RevenueCost::join('revenue_cost_categories', 'revenue_cost_categories.id', 'revenue_costs.category_id')
+                                            ->whereRaw('1=1'.$searchQuery)
+                                            ->count();
         
         ## Fetch records
-        $records = RevenueCost::whereRaw('1=1'.$searchQuery)
-                    // ->orderBy($columnName, $columnSortOrder)
+        $records = RevenueCost::join('revenue_cost_categories', 'revenue_cost_categories.id', 'revenue_costs.category_id')
+                    ->whereRaw('1=1'.$searchQuery)
+                    ->select('revenue_costs.*', 'revenue_cost_categories.name')
+                    ->orderBy($columnName, $columnSortOrder)
                     ->offset($row)
                     ->limit($rowPerPage)
                     ->get();
@@ -189,7 +193,7 @@ class RevenueCostController extends Controller
             // $routeDetail = route('revenue-cost-detail', ['revenueId' => $record->id]);
             // $routeDelete = route('revenue-cost.delete', ['id' => $record->id]);
             $data[] = [
-                "category_id" => $record->category_id,
+                "name" => $record->name,
                 "type" => $record->type,
                 "date" => $record->date,
                 "price" => $record->price,

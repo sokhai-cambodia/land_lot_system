@@ -172,7 +172,7 @@
                     </ul>
                 </li> 
                 {{-- User Setting --}}
-                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['profile.change-password'], true) }}">
+                <li class="nav-item has-treeview {{ UtilHelper::activeSideBar(['profile.change-password', 'profile.update'], true) }}">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-user-cog"></i>
                         <p>
@@ -182,7 +182,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ UtilHelper::route('#') }}" class="nav-link {{ UtilHelper::activeSideBar(['#']) }}">
+                            <a href="{{ UtilHelper::route('profile.update') }}" class="nav-link {{ UtilHelper::activeSideBar(['profile.update']) }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>My Account</p>
                             </a>

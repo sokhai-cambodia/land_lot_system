@@ -1,7 +1,7 @@
 <footer class="main-footer">
     <div class="float-right d-none d-sm-block">
-        <b>Version</b> 3.0.0
+        <b>Land Lot System</b>
     </div>
-    <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong> All rights
+    <strong>Develop &copy; 2019 <a href="http://google.com">TEAMS</a>.</strong> All rights
     reserved.
 </footer>

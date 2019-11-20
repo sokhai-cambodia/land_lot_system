@@ -9,6 +9,7 @@ use App\LegalService;
 use App\Land;
 use App\LegalServiceProcess;
 use App\User;
+use App\RevenueCost;
 use Auth;
 use NotificationHelper;
 use DB;
@@ -284,7 +285,7 @@ class LegalServiceController extends Controller
 
         $is_continue = isset($request->is_continue);
 
-        LegalServiceProcess::create([
+        $process = LegalServiceProcess::create([
             'legal_service_id' => $legalService->id,
             'user_id' => $request->user,
             'start_date' => $request->start_date,
@@ -294,6 +295,14 @@ class LegalServiceController extends Controller
             'is_continue' => $is_continue,
             'status' => 'on_process',
             'created_by' => Auth::id(),
+        ]);
+
+        RevenueCost::createLegalServiceProcessFee([
+            'company_id' => Auth::user()->company_id,
+            'date' => date("Y-m-d H:i:s"),
+            'price' => $process->fee,
+            'reference_id' => $process->id,
+            'created_by' => Auth::id()
         ]);
         
         NotificationHelper::setSuccessNotification('Create Legal Service Success.');
