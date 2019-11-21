@@ -1,6 +1,3 @@
-@extends('layouts.cms.print-template')
-
-@section('content')
 <div class="invoice p-3 mb-3">
     <!-- title row -->
     <div class="row">
@@ -46,8 +43,7 @@
     <!-- this row will not appear when printing -->
     <div class="row no-print">
         <div class="col-12">
-            <button class="btn btn-default float-right" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+            <a href="{{ route('report.print-receipt', ['id' => $payment->id ]) }}" target="_blank" class="btn btn-default float-right"><i class="fas fa-print"></i> Print</a>
         </div>
     </div>
 </div>
-@endsection

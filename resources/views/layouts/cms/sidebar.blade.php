@@ -194,12 +194,6 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ UtilHelper::route('report.land-layout') }}" class="nav-link {{ UtilHelper::activeSideBar(['report.land-layout']) }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Land Layout</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="{{ UtilHelper::route('report.sold-land') }}" class="nav-link {{ UtilHelper::activeSideBar(['report.sold-land']) }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Sold Land</p>

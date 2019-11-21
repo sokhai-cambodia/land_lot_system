@@ -55,6 +55,31 @@ class LandPaymentController extends Controller
         ]);
     }
 
+    // view invoice receipt 
+
+    public function viewReceipt($id)
+    {
+        $payment = LandPayment::find($id);
+        $witness = User::find($payment->witness1_id);
+        $saler = User::find($payment->saler_id);
+        $customer = User::find($payment->customer_id);
+        $land = Land::find($payment->land_id);
+
+        $data = [
+            'payment' => $payment,
+            'witness' => $witness,
+            'saler' => $saler,
+            'customer' => $customer,
+            'land' => $land
+        ];
+        $content = view('cms.land-payment.view-receipt')->with($data)->render();
+
+        return response()->json([
+            'status' => 1,
+            'data' => $content
+        ]);
+    }
+
     // Create Payment 
     public function create($landId)
     {
@@ -478,8 +503,14 @@ class LandPaymentController extends Controller
 
         foreach($records as $record) {
             $status = "";
+            
+            // View Invoice
             $urlViewInvoice = route('land.payment.view-invoice', ['id' => $record->id]);
-            $actions = "<button class='dropdown-item btn-view-invoice' data-url='$urlViewInvoice'>View Invoice</button>";
+            $actions = "<button class='dropdown-item btn-view-modal' data-url='$urlViewInvoice'>View Invoice</button>";
+
+            // View Receipt
+            $urlViewReceipt = route('land.payment.view-receipt', ['id' => $record->id]);
+            $actions .= "<button class='dropdown-item btn-view-modal' data-url='$urlViewReceipt'>View Receipt</button>";
 
             $routeLegalService = route('legal-service.create', ['paymentId' => $record->id]);
             $actions .= "<a class='dropdown-item' href='$routeLegalService'>Legal Service</a>";

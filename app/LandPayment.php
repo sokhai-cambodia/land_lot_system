@@ -10,4 +10,8 @@ class LandPayment extends Model
     use SoftDeletes;
 
     protected $guarded = [];
+
+    public function priceAfterDiscount() {
+        return $this->price - ( $this->price * $this->discount / 100 );
+    }
 }

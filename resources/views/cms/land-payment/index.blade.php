@@ -134,7 +134,7 @@
             ]
         });
 
-        $("body").on("click", ".btn-view-invoice", function() {
+        $("body").on("click", ".btn-view-modal", function() {
             var url = $(this).attr('data-url');
 
             $.ajax({

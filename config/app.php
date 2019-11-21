@@ -228,6 +228,7 @@ return [
         'NotificationHelper' => App\Helpers\NotificationHelper::class,
         'FileHelper' => App\Helpers\FileHelper::class,
         'UtilHelper' => App\Helpers\UtilHelper::class,
+        'DateHelper' => App\Helpers\DateHelper::class,
 
     ],
 
