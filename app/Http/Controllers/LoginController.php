@@ -14,7 +14,7 @@ class LoginController extends Controller
     
     private $authorizedRoute = 'cms';
     private $unauthorizedRoute = 'login';
-    private $loginView = 'cms.login';
+    private $loginView = 'admin.login';
 
     public function index()
     {

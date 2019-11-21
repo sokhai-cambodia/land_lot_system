@@ -23,43 +23,43 @@ Route::post('/login', 'LoginController@login')->name('login');
 Route::get('/logout', 'LoginController@logout')->name('logout');
 
 Route::get('/', function () {
-    return redirect()->route('cms');
+    return redirect()->route('admin');
 });
 
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['prefix' => 'cms', 'middleware' => ['auth']], function(){
+Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
 
     Route::get('', function () {
-        return view('cms.blank');
-    })->name('cms');
+        return view('admin.blank');
+    })->name('admin');
 
     // PROFILE
-    require_once __DIR__.'/cms/profile.php';
+    require_once __DIR__.'/admin/profile.php';
 
     // Comapny
-    require_once __DIR__.'/cms/company.php';
+    require_once __DIR__.'/admin/company.php';
 
     // User
-    require_once __DIR__.'/cms/user.php';
+    require_once __DIR__.'/admin/user.php';
     
     // Land
-    require_once __DIR__.'/cms/land.php';
+    require_once __DIR__.'/admin/land.php';
 
     // Land Payment
-    require_once __DIR__.'/cms/land-payment.php';
+    require_once __DIR__.'/admin/land-payment.php';
 
     // Legal Service
-    require_once __DIR__.'/cms/legal-service.php';
+    require_once __DIR__.'/admin/legal-service.php';
 
     // Revenue Cost
-    require_once __DIR__.'/cms/revenue-cost.php';
+    require_once __DIR__.'/admin/revenue-cost.php';
 
     // Document
-    require_once __DIR__.'/cms/document.php';
+    require_once __DIR__.'/admin/document.php';
 
     // Report
-    require_once __DIR__.'/cms/report.php';
+    require_once __DIR__.'/admin/report.php';
 
 });
