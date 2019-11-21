@@ -36,7 +36,9 @@ class RevenueCostController extends Controller
             return redirect()->back();
         }
 
-        $categories = RevenueCostCategory::where('type', $type)->get();
+        $categories = RevenueCostCategory::where('type', $type)
+                                        ->where('is_editable', 1)
+                                        ->get();
         $data = [
             'title' => 'Create '.ucfirst($type),
             'contentHeaders' => [
@@ -104,7 +106,9 @@ class RevenueCostController extends Controller
             return redirect()->back();
         }
 
-        $categories = RevenueCostCategory::where('type', $row->type)->get();
+        $categories = RevenueCostCategory::where('type', $row->type)
+                                            ->where('is_editable', 1)
+                                            ->get();
         $data = [
         
             'title' => 'Edit '.ucfirst($row->type),

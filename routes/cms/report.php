@@ -2,6 +2,7 @@
 
 Route::group(['prefix' => 'report'], function(){
     Route::get('/daily', 'Cms\ReportController@index')->name('report.daily');
+    Route::get('/print/daily', 'Cms\ReportController@printDaily')->name('report.print.daily');
     
     Route::get('/monthly', 'Cms\ReportController@monthly')->name('report.monthly');
     Route::get('/print/monthly', 'Cms\ReportController@printMonthly')->name('report.print-monthly');
