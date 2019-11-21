@@ -16,6 +16,15 @@ Class DateHelper
         return DateHelper::toKhmerNo($d).' - '.DateHelper::toKhmerMonth($m).' - '.DateHelper::toKhmerNo($y);
     }
 
+    public static function toKhmerFullDate($date) {
+        $date = strtotime($date);
+        $d = date('d', $date);      
+        $m = date('m', $date);
+        $y = date('Y', $date);
+
+        return 'ថ្ងៃទី'.DateHelper::toKhmerNo($d).' ខែ'.DateHelper::toKhmerMonth($m).' នាំ'.DateHelper::toKhmerNo($y);
+    }
+
     public static function toKhmerNo($no) {
         $noArr = [
             "០",

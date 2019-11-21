@@ -9,6 +9,8 @@ use App\LandPayment;
 use App\User;
 use App\Land;
 
+use DB;
+
 class ReportController extends Controller
 {   
     private $contentHeaders = ['name' => 'Dashboard', 'route' => 'cms', 'class' => ''];
@@ -65,15 +67,44 @@ class ReportController extends Controller
 
     public function soldLand()
     {
+        $date = date('d-m-Y');
+        
         $data = [
             'title' => 'Report',
             'contentHeaders' => [
                 $this->contentHeaders,
                 ['name' => 'Report', 'route' => '', 'class' => 'active']
             ],
+            'reports' => $this->getSoldLandReport($date),
+            'date' => $date
         ];
         
         return view('cms.report.sold-land')->with($data);
+    }
+
+    public function printSoldLand()
+    {
+        $date = date('d-m-Y');
+        $data = [
+            'reports' => $this->getSoldLandReport($date),
+            'date' => $date
+        ];
+        
+        return view('cms.report.print.sold-land')->with($data);
+    }
+
+    private function getSoldLandReport($date) {
+        return LandPayment::join('lands', 'lands.id', 'land_payments.land_id')
+                        ->join('users', 'users.id', 'land_payments.customer_id')
+                        ->where(DB::raw("DATE_FORMAT(land_payments.created_at, '%d-%m-%Y')"), $date)
+                        ->orderBy('land_payments.id')
+                        ->select(
+                            'land_payments.*',
+                            'lands.title',
+                            DB::raw("CONCAT(users.last_name, ' ', users.first_name) AS customer_name"),
+                            "users.phone"
+                        )
+                        ->get();
     }
 
 }
