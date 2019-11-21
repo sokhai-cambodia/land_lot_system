@@ -25,7 +25,7 @@
                         <th>Deposit</th>
                         <th>Receive</th>
                         <th>Discount (%)</th>
-                        <th>Comission</th>
+                        <th>Commission</th>
                         <th>Payment Type</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -40,7 +40,7 @@
                         <th>Deposit</th>
                         <th>Receive</th>
                         <th>Discount (%)</th>
-                        <th>Comission</th>
+                        <th>Commission</th>
                         <th>Payment Type</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -124,7 +124,7 @@
                 { data: 'deposit' },
                 { data: 'receive' },
                 { data: 'discount' },
-                { data: 'comission' },
+                { data: 'commission' },
                 { data: 'payment_type' },
                 { data: 'status' },
                 { data: 'action' },

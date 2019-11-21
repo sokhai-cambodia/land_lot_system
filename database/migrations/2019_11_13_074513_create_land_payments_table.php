@@ -33,7 +33,8 @@ class CreateLandPaymentsTable extends Migration
             $table->double('receive', 19, 2)->default(0); // money receive
             $table->dateTime('receive_at')->nullable();
             $table->double('discount', 19, 2)->default(0);
-            $table->double('comission', 19, 2)->default(0);
+            $table->double('commission_percent', 19, 2)->default(0);
+            $table->double('commission', 19, 2)->default(0);
             $table->enum('payment_type', ['installment_payment', 'completed_payment'])->default('installment_payment');
             $table->enum('status', ['sold', 'booked', 'installment_process', 'installment_done']); // track staus of payment 
             $table->enum('installment_type', ['weekly', 'monthly', 'none']); // which installment user want to paid weekly or monthly

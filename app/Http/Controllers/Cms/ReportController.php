@@ -16,6 +16,7 @@ class ReportController extends Controller
 
     public function index()
     {
+        
         $data = [
             'title' => 'Report',
             'contentHeaders' => [
