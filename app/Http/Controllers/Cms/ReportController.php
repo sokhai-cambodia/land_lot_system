@@ -8,7 +8,6 @@ use NotificationHelper;
 use App\LandPayment;
 use App\User;
 use App\Land;
-
 use DB;
 
 class ReportController extends Controller
@@ -30,15 +29,33 @@ class ReportController extends Controller
 
     public function monthly()
     {
+        $date = date("m-Y");
+        $reports = $this->getMonthlyReport($date);
+
         $data = [
             'title' => 'Report',
             'contentHeaders' => [
                 $this->contentHeaders,
                 ['name' => 'Report', 'route' => '', 'class' => 'active']
             ],
+            "reports" => $reports,
+            "month" => date("m")
         ];
         
         return view('cms.report.monthly')->with($data);
+    }
+
+    public function printMonthly()
+    {
+        $date = date("m-Y");
+        $reports = $this->getMonthlyReport($date);
+
+        $data = [
+            "reports" => $reports,
+            "month" => date("m")
+        ];
+        
+        return view('cms.report.print.monthly')->with($data);
     }
 
     public function printReceipt($id)
@@ -68,7 +85,7 @@ class ReportController extends Controller
     public function soldLand()
     {
         $date = date('d-m-Y');
-        
+
         $data = [
             'title' => 'Report',
             'contentHeaders' => [
@@ -105,6 +122,23 @@ class ReportController extends Controller
                             "users.phone"
                         )
                         ->get();
+    }
+
+    private function getMonthlyReport($date) {
+        return DB::select("
+            SELECT
+                DATE_FORMAT(rc.date, '%d-%m-%Y') AS date,
+                rcc.`name` AS category_name,
+                rc.type,
+                SUM(price) as total
+            FROM revenue_costs rc
+            JOIN revenue_cost_categories rcc ON rcc.id = rc.category_id
+            WHERE rc.deleted_at IS NULL 
+                AND rcc.deleted_at IS NULL
+                AND DATE_FORMAT(rc.date, '%m-%Y') = '$date'
+            GROUP BY DATE_FORMAT(rc.date, '%d-%m-%Y'), rcc.name, rc.type
+            ORDER BY DATE_FORMAT(rc.date, '%d-%m-%Y')
+        ");
     }
 
 }

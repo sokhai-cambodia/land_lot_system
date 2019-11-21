@@ -25,7 +25,7 @@
                     <div class="row invoice-info"  style="margin-top: 50px">
                         <div class="col-sm-12 invoice-col">
                             <p class="text-center">
-                                របាយការណ៍ចំណាយ-ចំណូលប្រចាំខែសីហាផ្នែកគណយ្យករ
+                            របាយការណ៍ចំណាយ-ចំណូលប្រចាំខែ{{ DateHelper::toKhmerMonth($month) }}ផ្នែកគណយ្យករ
                             </p>
                         </div>
                     </div>
@@ -39,27 +39,54 @@
                                         <th>ល.រ</th>
                                         <th>ថ្ងៃ.ទី…ខែ…ឆ្នាំ</th>
                                         <th>ឈ្នោះ</th>
-                                        <th>ចំណូល</th>
-                                        <th>ចំណាយ</th>
+                                        <th>ប្រភេទ</th>
+                                        <th>ចំណូល/ចំណាយ</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @for($i = 1; $i <= 10; $i++)
+                                    @php 
+                                        $no = 1;
+                                        $cost = 0;
+                                        $revenue = 0;
+                                    @endphp
+                                    
+                                    @foreach($reports as $report)
+                                        @php 
+                                            $total = 0;
+                                            if($report->type == 'cost') {
+                                                $total = $report->total * -1;
+                                                $cost += $report->total;
+
+                                            } else {
+                                                $total = $report->total;
+                                                $revenue += $report->total;
+                                            }
+
+                                        @endphp
                                         <tr>
-                                            <th>{{ $i }}</th>
-                                            <th>14/02/2019</th>
-                                            <th>ញឹក ផាត</th>
-                                            <th>B3</th>
-                                            <th>1</th>
+                                            <th>{{ $no++ }}</th>
+                                            <th>{{ $report->date }}</th>
+                                            <th>{{ $report->category_name }}</th>
+                                            <th>{{ $report->type }}</th>
+                                            <th>{{ $total }}</th>
                                         </tr>
-                                    @endfor
+                                    @endforeach
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="2"></th>
+                                        <th colspan="3"></th>
+                                        <th>ចំណូល</th>
+                                        <th>{{ $revenue }}</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3"></th>
+                                        <th>ចំណាយ</th>
+                                        <th>{{ $cost }}</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3"></th>
                                         <th>សរុប</th>
-                                        <th>10000</th>
-                                        <th>20000</th>
+                                        <th>{{ $revenue - $cost }}</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -91,7 +118,7 @@
                     <!-- this row will not appear when printing -->
                     <div class="row no-print">
                         <div class="col-12">
-                            <a href="invoice-print.html" target="_blank" class="btn btn-default float-right"><i class="fas fa-print"></i> Print</a>
+                            <a href="{{ route('report.print-monthly') }}" target="_blank" class="btn btn-default float-right"><i class="fas fa-print"></i> Print</a>
                         </div>
                     </div>
                 </div>
