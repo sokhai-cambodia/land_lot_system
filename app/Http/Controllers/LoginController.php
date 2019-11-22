@@ -12,7 +12,7 @@ use App\User;
 class LoginController extends Controller
 {
     
-    private $authorizedRoute = 'cms';
+    private $authorizedRoute = 'login';
     private $unauthorizedRoute = 'login';
     private $loginView = 'admin.login';
 
