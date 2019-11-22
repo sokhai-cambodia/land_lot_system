@@ -62,7 +62,7 @@
             <!-- /.col -->
         </div>
         <!-- /.row -->
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
@@ -189,7 +189,7 @@
                 <!-- /.card -->
             </div>
             <!-- /.col -->
-        </div>
+        </div> --}}
         <div class="card">
             <div class="card-header border-transparent">
                 <h3 class="card-title">Latest Orders</h3>
