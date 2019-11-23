@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\InstallmentPayment;
 use NotificationHelper;
 
 use App\LandPayment;
@@ -13,6 +14,39 @@ use DB;
 class ReportController extends Controller
 {   
     private $contentHeaders = ['name' => 'Dashboard', 'route' => 'cms', 'class' => ''];
+
+    public function dashboard()
+    {
+        $date = date("m-Y");
+        $customerCount = User::where('role', 'customer')
+                            ->where(DB::raw("DATE_FORMAT(created_at, '%m-%Y')"), "$date")
+                            ->count();
+
+        $paymentCount = LandPayment::where(DB::raw("DATE_FORMAT(created_at, '%m-%Y')"), "$date")->count();
+        
+        $iPayments = InstallmentPayment::where('status', 'unpaid')
+                                        ->orderBy('id', 'asc')
+                                        ->limit(5)
+                                        ->get();
+        
+        $landCount = Land::where('type', 'land')
+                        ->where('status', 'on_sale')
+                        ->where('is_split_land_lot', 0)
+                        ->count();
+        $landLotCount = Land::where('type', 'land_lot')
+                        ->where('status', 'on_sale')
+                        ->count();
+                                        
+
+        $data = [
+            'iPayments' => $iPayments,
+            'customerCount' => $customerCount,
+            'paymentCount' => $paymentCount,
+            'landCount' => $landCount,
+            'landLotCount' => $landLotCount,
+        ];
+        return view('admin.blank')->with($data);
+    }
 
     public function index()
     {

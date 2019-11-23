@@ -31,9 +31,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
 
-    Route::get('', function () {
-        return view('admin.blank');
-    })->name('admin');
+    Route::get('', 'Admin\ReportController@dashboard')->name('admin');
 
     // PROFILE
     require_once __DIR__.'/admin/profile.php';
